@@ -5,12 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.JsonObject;
+import beans.ScheduleBean;
 
 public class Schedule {
 
@@ -28,8 +27,7 @@ public class Schedule {
 		return con;
 	}
 
-	public String insertScedule(String doctorID, String hospitalID, String st_time, String end_time, String day_of_wk,
-			String status) {
+	public String insertScedule(ScheduleBean sch) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -41,16 +39,15 @@ public class Schedule {
 					+ "(scheduleID,doctorID,hospitalID,st_time,end_time,day_of_wk,status)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 
-		
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setInt(2, Integer.parseInt(doctorID));
-			preparedStmt.setInt(3, Integer.parseInt(hospitalID));
-			preparedStmt.setString(4, st_time);
-			preparedStmt.setString(5, end_time);
-			preparedStmt.setString(6, day_of_wk);
-			preparedStmt.setString(7, status);
+			preparedStmt.setInt(2, Integer.parseInt(sch.getDoctorID()));
+			preparedStmt.setInt(3, Integer.parseInt(sch.getHospitalID()));
+			preparedStmt.setString(4, sch.getStTime());
+			preparedStmt.setString(5, sch.getEndTime());
+			preparedStmt.setString(6, sch.getDay_of_wk());
+			preparedStmt.setString(7, sch.getStatus());
 
 //execute the statement
 			preparedStmt.execute();
@@ -63,12 +60,14 @@ public class Schedule {
 		return output;
 	}
 
-	public String readSchedule() {
-		String output = "";
+	public List<ScheduleBean> readSchedule() {
+			List <ScheduleBean> schList = new ArrayList<>();
 		try {
 			Connection con = connect();
 			if (con == null) {
-				return "Error while connecting to the database for reading.";
+				
+				System.out.println("Error While reading from database");
+				return schList;
 			}
 
 			String query = "select * from schedule";
@@ -76,37 +75,28 @@ public class Schedule {
 			ResultSet rs = stmt.executeQuery(query);
 
 			while (rs.next()) {
-				String scheduleID = Integer.toString(rs.getInt("scheduleID"));
-				String doctorID = Integer.toString(rs.getInt("doctorID"));
-				String hospitalID = Integer.toString(rs.getInt("hospitalID"));
-				String stTime = rs.getString("st_time");
-				String endTime = rs.getString("end_time");
-				String DOW = rs.getString("day_of_wk");
-				String status = rs.getString("status");
-
-				JsonObject sampleObject = new JsonObject();
-				sampleObject.addProperty("scheduleID", scheduleID);
-				sampleObject.addProperty("doctorID", doctorID);
-				sampleObject.addProperty("hospitalID", hospitalID);
-				sampleObject.addProperty("st_time", stTime);
-				sampleObject.addProperty("end_time", endTime);
-				sampleObject.addProperty("day_of_wk", DOW);
-				sampleObject.addProperty("status", status);
-
-				output = sampleObject.toString();
+				ScheduleBean sch = new ScheduleBean(
+							rs.getInt("scheduleID"),
+							Integer.toString(rs.getInt("doctorID")),
+							Integer.toString(rs.getInt("hospitalID")),
+							rs.getString("st_time"),
+							rs.getString("end_time"),
+							rs.getString("day_of_wk"),
+							rs.getString("status"));
+				
+				schList.add(sch);
 
 			}
 			con.close();
 
 		} catch (Exception e) {
-			output = "Error while reading the schedule.";
+			System.out.println("error wihile reading");
 			System.err.println(e.getMessage());
 		}
-		return output;
+		return schList;
 	}
 
-	public String updateSchedule(String ID, String doctorID, String hospitalID, String st_time, String end_time,
-			String day_of_wk, String status) {
+	public String updateSchedule(ScheduleBean sch) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -117,16 +107,15 @@ public class Schedule {
 			String query = "UPDATE schedule SET" + " doctorID=?," + "hospitalID=?," + "st_time=?," + "end_time=?,"
 					+ "day_of_wk=?, " + "status=?" + "WHERE scheduleID=?";
 
-
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 // binding values
-			preparedStmt.setInt(1, Integer.parseInt(doctorID));
-			preparedStmt.setInt(2, Integer.parseInt(hospitalID));
-			preparedStmt.setString(3, st_time);
-			preparedStmt.setString(4, end_time);
-			preparedStmt.setString(5, day_of_wk);
-			preparedStmt.setString(6, status);
-			preparedStmt.setInt(7, Integer.parseInt(ID));
+			preparedStmt.setInt(1, Integer.parseInt(sch.getDoctorID()));
+			preparedStmt.setInt(2, Integer.parseInt(sch.getHospitalID()));
+			preparedStmt.setString(3, sch.getStTime());
+			preparedStmt.setString(4, sch.getEndTime());
+			preparedStmt.setString(5, sch.getDay_of_wk());
+			preparedStmt.setString(6, sch.getStatus());
+			preparedStmt.setInt(7, sch.getId());
 // execute the statement
 			preparedStmt.execute();
 			con.close();

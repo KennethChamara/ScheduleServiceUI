@@ -26,36 +26,84 @@ public class PatientService {
 		return PatientObj.readPatient();
 	}
 
+	
+	
+	
 	@POST
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String insertPatient(@FormParam("PatientNIC") String PatientNIC, @FormParam("PatientFName") String PatientFName,
-			@FormParam("PatientLName") String PatientLName, @FormParam("PatientGender") String PatientGender,
-			@FormParam("PatientPhone") String PatientPhone, @FormParam("PatientBloodGroup") String PatientBloodGroup,
-			@FormParam("PatientMaritalStatus") String PatientMaritalStatus, @FormParam("Patient_Add_Line1") String Patient_Add_Line1,
-			@FormParam("Patient_Add_Line2") String Patient_Add_Line2, @FormParam("Patient_Add_Line3") String Patient_Add_Line3,
-			@FormParam("Patient_Add_City") String Patient_Add_City, @FormParam("PatientDOB") String PatientDOB, 
-			@FormParam("PatientEmail") String PatientEmail, @FormParam("PatientUsername") String PatientUsername,
-			@FormParam("PatientPassword") String PatientPassword) {
-		String output = PatientObj.insertPatient(PatientNIC, PatientFName,PatientLName, PatientGender,PatientPhone, PatientBloodGroup,PatientMaritalStatus, Patient_Add_Line1,Patient_Add_Line2, Patient_Add_Line3, Patient_Add_City, PatientDOB, PatientEmail, PatientUsername,PatientPassword);
+	public String insertPatient(String PatientData) {
+		
+		JsonObject PatientObject = new JsonParser().parse(PatientData).getAsJsonObject();
+		
+		
+		String PatientNIC = PatientObject.get("PatientNIC").getAsString();
+		String PatientFName = PatientObject.get("PatientFName").getAsString();
+		String PatientLName = PatientObject.get("PatientLName").getAsString();
+		String PatientGender = PatientObject.get("PatientGender").getAsString();
+		String PatientPhone = PatientObject.get("PatientPhone").getAsString();
+		String PatientBloodGroup = PatientObject.get("PatientBloodGroup").getAsString();
+		String PatientMaritalStatus = PatientObject.get("PatientMaritalStatus").getAsString();
+		String Patient_Add_Line1 = PatientObject.get("Patient_Add_Line1").getAsString();
+		String Patient_Add_Line2 = PatientObject.get("Patient_Add_Line2").getAsString();
+		String Patient_Add_Line3 = PatientObject.get("Patient_Add_Line3").getAsString();
+		String Patient_Add_City = PatientObject.get("Patient_Add_City").getAsString();
+		String PatientDOB = PatientObject.get("PatientDOB").getAsString();
+		String PatientEmail = PatientObject.get("PatientEmail").getAsString();
+		String PatientUsername = PatientObject.get("PatientUsername").getAsString();
+		String PatientPassword = PatientObject.get("PatientPassword").getAsString();
+		
+		
+		String output = PatientObj.insertPatient(PatientNIC, PatientFName,PatientLName, PatientGender,PatientPhone, PatientBloodGroup,PatientMaritalStatus, Patient_Add_Line1,Patient_Add_Line2, Patient_Add_Line3, Patient_Add_City, PatientDOB,PatientEmail, PatientUsername,PatientPassword);
+		return output;
+		
+		
+	} 
+	
+	@PUT
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String updatePatient(String PatientData) {
+		// Convert the input string to a JSON object
+		JsonObject PatientObject = new JsonParser().parse(PatientData).getAsJsonObject();
+		// Read the values from the JSON object
+		String PatientID = PatientObject.get("PatientID").getAsString();
+		String PatientNIC = PatientObject.get("PatientNIC").getAsString();
+		String PatientFName = PatientObject.get("PatientFName").getAsString();
+		String PatientLName = PatientObject.get("PatientLName").getAsString();
+		String PatientGender = PatientObject.get("PatientGender").getAsString();
+		String PatientPhone = PatientObject.get("PatientPhone").getAsString();
+		String PatientBloodGroup = PatientObject.get("PatientBloodGroup").getAsString();
+		String PatientMaritalStatus = PatientObject.get("PatientMaritalStatus").getAsString();
+		String Patient_Add_Line1 = PatientObject.get("Patient_Add_Line1").getAsString();
+		String Patient_Add_Line2 = PatientObject.get("Patient_Add_Line2").getAsString();
+		String Patient_Add_Line3 = PatientObject.get("Patient_Add_Line3").getAsString();
+		String Patient_Add_City = PatientObject.get("Patient_Add_City").getAsString();
+		String PatientDOB = PatientObject.get("PatientDOB").getAsString();
+		String PatientEmail = PatientObject.get("PatientEmail").getAsString();
+		String PatientUsername = PatientObject.get("PatientUsername").getAsString();
+		String PatientPassword = PatientObject.get("PatientPassword").getAsString();
+		String output = PatientObj.updatePatient(PatientID,PatientNIC, PatientFName,PatientLName, PatientGender,PatientPhone, PatientBloodGroup,PatientMaritalStatus, Patient_Add_Line1,Patient_Add_Line2, Patient_Add_Line3, Patient_Add_City, PatientDOB,PatientEmail, PatientUsername,PatientPassword);
 		return output;
 	}
-
 	
 
+	
 	@DELETE
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String deletePatient(String PatientData) {
-		// Convert the input string to an XML document
-		Document doc = Jsoup.parse(PatientData, "", Parser.xmlParser());
-
-		// Read the value from the element <itemID>
-		String PatientID = doc.select("PatientID").text();
+		JsonObject PatientObject = new JsonParser().parse(PatientData).getAsJsonObject();
+		
+		String PatientID = PatientObject.get("PatientID").getAsString();
+		
 		String output = PatientObj.deletePatient(PatientID);
-		return output;  
+		return output;
+		
+		
 	}
 	
 	

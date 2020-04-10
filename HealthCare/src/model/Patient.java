@@ -127,6 +127,46 @@ public class Patient {
 	
 	
 	
+	public String updatePatient(String id, String nic, String fname, String lname, String gender,String phone, String blood,String mstatus, String aLine1,String aLine2, String aLine3, String aCity,String dob,String email, String username, String password) {
+ {
+		String output = "";
+		try {
+			Connection con = connect();
+			if (con == null) {
+				return "Error while connecting to the database for updating.";
+			}
+			// create a prepared statement
+			String query = "UPDATE patient SET PatientNIC=?,PatientFName=?,PatientLName=?,PatientGender=?,PatientPhone=?,PatientBloodGroup=?,PatientMaritalStatus=?,Patient_Add_Line1=?,Patient_Add_Line2=?,Patient_Add_Line3=?,Patient_Add_City=?,PatientDOB=?,PatientEmail=?,PatientUsername=?,PatientPassword=? WHERE PatientID=?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			// binding values
+			preparedStmt.setString(1, nic);
+			preparedStmt.setString(2, fname);
+			preparedStmt.setString(3, lname);
+			preparedStmt.setString(4, gender);
+			preparedStmt.setString(5, phone);
+			preparedStmt.setString(6, blood);
+			preparedStmt.setString(7, mstatus);
+			preparedStmt.setString(8, aLine1);
+			preparedStmt.setString(9, aLine2);
+			preparedStmt.setString(10, aLine3);
+			preparedStmt.setString(11, aCity);
+			preparedStmt.setString(12, dob);
+			preparedStmt.setString(13, email);
+			preparedStmt.setString(14, username);
+			preparedStmt.setString(15, password);
+			preparedStmt.setInt(16, Integer.parseInt(id));
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+			output = "Updated successfully";
+		} catch (Exception e) {
+			output = "Error while updating the patient.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
+	}
+	
 	
 
 

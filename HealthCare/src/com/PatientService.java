@@ -61,7 +61,7 @@ public class PatientService {
 		
 	} 
 	
-	@PUT
+	@PUT 
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)

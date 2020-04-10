@@ -129,7 +129,7 @@ public class Patient {
 	
 	public String updatePatient(String id, String nic, String fname, String lname, String gender,String phone, String blood,String mstatus, String aLine1,String aLine2, String aLine3, String aCity,String dob,String email, String username, String password) {
  {
-		String output = "";
+		String output = ""; 
 		try {
 			Connection con = connect();
 			if (con == null) {

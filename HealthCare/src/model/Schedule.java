@@ -1,36 +1,21 @@
 package model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonObject;
 import beans.ScheduleBean;
+import util.DBConnection;
 
 public class Schedule {
-
-	private Connection connect() {
-		Connection con = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			// Provide the correct details: DBServer/DBName, username, password
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/HMS?useTimezone=true&serverTimezone=UTC",
-					"root", "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return con;
-	}
 
 	public String insertScedule(ScheduleBean sch) {
 		String output = "";
 		try {
-			Connection con = connect();
+			Connection con = DBConnection.connect();
 			if (con == null) {
 				return "Error while connecting to the database for inserting.";
 			}
@@ -61,11 +46,11 @@ public class Schedule {
 	}
 
 	public List<ScheduleBean> readSchedule() {
-			List <ScheduleBean> schList = new ArrayList<>();
+		List<ScheduleBean> schList = new ArrayList<>();
 		try {
-			Connection con = connect();
+			Connection con = DBConnection.connect();
 			if (con == null) {
-				
+
 				System.out.println("Error While reading from database");
 				return schList;
 			}
@@ -75,15 +60,10 @@ public class Schedule {
 			ResultSet rs = stmt.executeQuery(query);
 
 			while (rs.next()) {
-				ScheduleBean sch = new ScheduleBean(
-							rs.getInt("scheduleID"),
-							Integer.toString(rs.getInt("doctorID")),
-							Integer.toString(rs.getInt("hospitalID")),
-							rs.getString("st_time"),
-							rs.getString("end_time"),
-							rs.getString("day_of_wk"),
-							rs.getString("status"));
-				
+				ScheduleBean sch = new ScheduleBean(rs.getInt("scheduleID"), Integer.toString(rs.getInt("doctorID")),
+						Integer.toString(rs.getInt("hospitalID")), rs.getString("st_time"), rs.getString("end_time"),
+						rs.getString("day_of_wk"), rs.getString("status"));
+
 				schList.add(sch);
 
 			}
@@ -99,7 +79,7 @@ public class Schedule {
 	public String updateSchedule(ScheduleBean sch) {
 		String output = "";
 		try {
-			Connection con = connect();
+			Connection con = DBConnection.connect();
 			if (con == null) {
 				return "Error while connecting to the database for updating.";
 			}
@@ -130,7 +110,7 @@ public class Schedule {
 	public String deleteSchedule(String ID) {
 		String output = "";
 		try {
-			Connection con = connect();
+			Connection con = DBConnection.connect();
 			if (con == null) {
 				return "Error while connecting to the database for deleting.";
 			}

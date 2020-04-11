@@ -9,6 +9,24 @@ public abstract class APaymentBean {
     private Date paymentDate;
 
     private boolean refunded;
+    private Date refundedDate;
+    private int appointmentId;
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public Date getRefundedDate() {
+        return refundedDate;
+    }
+
+    public void setRefundedDate(Date refundedDate) {
+        this.refundedDate = refundedDate;
+    }
 
     public double getAmount() {
         return amount;

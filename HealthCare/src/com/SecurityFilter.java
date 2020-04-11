@@ -20,7 +20,7 @@ import util.DBConnection;
 
 
 
-@Provider
+//@Provider
 public class SecurityFilter implements ContainerRequestFilter {
 	public static final String AUTHENTICATION_HEADER_KEY = "Authorization";
 	public static final String AUTHENTICATION_HEADER_PREFIX = "Basic ";

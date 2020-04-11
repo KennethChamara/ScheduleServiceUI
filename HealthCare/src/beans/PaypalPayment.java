@@ -1,6 +1,28 @@
 package beans;
 
-public class PaypalPayment extends  APaymentBean{
+import java.io.Serializable;
+import java.sql.Date;
 
-    public String referenceNumber;
+import javax.xml.bind.annotation.XmlRootElement;
+
+public class PaypalPayment extends  Payment implements Serializable{
+
+    public String paypalReferenceNumber;
+
+    public PaypalPayment() {}
+    
+	public PaypalPayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,
+			String paypalReferenceNumber) {
+		super(amount, paymentDate, refunded, refundedDate, appointmentId);
+		this.paypalReferenceNumber = paypalReferenceNumber;
+	}
+
+	public String getPaypalReferenceNumber() {
+		return paypalReferenceNumber;
+	}
+
+	public void setPaypalReferenceNumber(String paypalReferenceNumber) {
+		this.paypalReferenceNumber = paypalReferenceNumber;
+	}
+        
 }

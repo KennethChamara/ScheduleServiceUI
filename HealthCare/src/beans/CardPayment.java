@@ -1,15 +1,38 @@
 package beans;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class CardPaymentBean extends  APaymentBean {
+import javax.xml.bind.annotation.XmlRootElement;
+
+public class CardPayment extends  Payment implements Serializable {
     private  String cardNumber;
     private int expYear;
     private int expMonth;
     private int securityCode;
     private String cardHoldersName;
 
-    public String getCardNumber() {
+    public CardPayment() {}
+    
+    
+  
+
+
+	public CardPayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,
+			String cardNumber, int expYear, int expMonth, int securityCode, String cardHoldersName) {
+		super(amount, paymentDate, refunded, refundedDate, appointmentId);
+		this.cardNumber = cardNumber;
+		this.expYear = expYear;
+		this.expMonth = expMonth;
+		this.securityCode = securityCode;
+		this.cardHoldersName = cardHoldersName;
+	}
+
+
+
+
+
+	public String getCardNumber() {
         return cardNumber;
     }
 

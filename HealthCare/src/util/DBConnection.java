@@ -15,12 +15,10 @@ public class DBConnection {
 
 		if (connection == null || connection.isClosed()) {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
 			// Provide the correct details: DBServer/DBName, username, password
 			connection = DriverManager
 					.getConnection("jdbc:mysql://127.0.0.1:3306/HMS?useTimezone=true&serverTimezone=UTC", "root", "");
 		}
-
 		return connection;
   
 		

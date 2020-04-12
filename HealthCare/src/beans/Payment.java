@@ -5,7 +5,7 @@ import java.sql.Date;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({CardPayment.class,OnlinePayment.class,PaypalPayment.class})
-public abstract class Payment implements Serializable {
+public   class Payment implements Serializable {
 
 	private double amount;
 
@@ -14,18 +14,28 @@ public abstract class Payment implements Serializable {
 	private boolean refunded;
 	private Date refundedDate;
 	private int appointmentId;
+	private double refundAmount;
 
-	public Payment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId) {
+	public Payment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,double refundAmount) {
 		super();
 		this.amount = amount;
 		this.paymentDate = paymentDate;
 		this.refunded = refunded;
 		this.refundedDate = refundedDate;
 		this.appointmentId = appointmentId;
+		this.refundAmount=refundAmount;
 	}
 
 	public Payment() {
 		super();
+	}
+
+	public double getRefundAmount() {
+		return refundAmount;
+	}
+
+	public void setRefundAmount(double refundAmount) {
+		this.refundAmount = refundAmount;
 	}
 
 	public int getAppointmentId() {

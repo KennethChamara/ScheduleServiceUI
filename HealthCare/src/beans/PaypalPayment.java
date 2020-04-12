@@ -11,9 +11,9 @@ public class PaypalPayment extends  Payment implements Serializable{
 
     public PaypalPayment() {}
     
-	public PaypalPayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,
+	public PaypalPayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,double refundAmount,
 			String paypalReferenceNumber) {
-		super(amount, paymentDate, refunded, refundedDate, appointmentId);
+		super(amount, paymentDate, refunded, refundedDate, appointmentId,refundAmount);
 		this.paypalReferenceNumber = paypalReferenceNumber;
 	}
 

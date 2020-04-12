@@ -34,6 +34,16 @@ public class PaymentService {
 		}
 
 	}
+	
+	public boolean makeRefund(Payment payment)throws SQLException  {
+		String sql ="update  `tbl_payments` set refunded=? ,`refunded_date`=?, `refund_amount`=? where `appointment_id`=?";
+		PreparedStatement statement=this.sqlConnection.prepareStatement(sql);
+		statement.setBoolean(1, true);
+		statement.setDate(2, new Date(new java.util.Date().getTime()));
+		statement.setDouble(3, payment.getRefundAmount());
+		statement.setInt(4, payment.getAppointmentId());
+		return statement.execute();
+	}
 
 	public List<Payment> getAllPayments() throws SQLException {
 		String sql = "SELECT " + "`id`, " // 1
@@ -50,6 +60,7 @@ public class PaymentService {
 				+ "`online_payment_refarance`, "// 12
 				+ "`paypal_payment_refarance`, "// 13
 				+ "`type` "// 14
+				+"`refund_amount`" //15
 				+ "FROM `tbl_payments`";
 		ResultSet resultSet = this.sqlConnection.prepareStatement(sql).executeQuery();
 		List<Payment> payments = new ArrayList<>();
@@ -59,14 +70,14 @@ public class PaymentService {
 			 
 		 if(type.equals(PaymentMethod.CreditCard.name()))
 				payments.add(new CardPayment(resultSet.getDouble(3), resultSet.getDate(4), resultSet.getBoolean(5),
-						resultSet.getDate(6), resultSet.getInt(2), resultSet.getString(7), resultSet.getInt(8),
+						resultSet.getDate(6), resultSet.getInt(2),resultSet.getDouble(15), resultSet.getString(7), resultSet.getInt(8),
 						resultSet.getInt(9), resultSet.getInt(10), resultSet.getString(11)));
 		 else if(type.equals(PaymentMethod.OnlineBanking.name()))
 			 payments.add(new OnlinePayment(resultSet.getDouble(3), resultSet.getDate(4), resultSet.getBoolean(5),
-						resultSet.getDate(6), resultSet.getInt(2), resultSet.getString(12)));
+						resultSet.getDate(6), resultSet.getInt(2),resultSet.getDouble(15), resultSet.getString(12)));
 		 else if(type.equals(PaymentMethod.PayPal.name()))
 			 payments.add(new PaypalPayment(resultSet.getDouble(3), resultSet.getDate(4), resultSet.getBoolean(5),
-						resultSet.getDate(6), resultSet.getInt(2), resultSet.getString(13)));
+						resultSet.getDate(6), resultSet.getInt(2),resultSet.getDouble(15), resultSet.getString(13)));
 				 
 		}
 		

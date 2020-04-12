@@ -23,7 +23,7 @@ public class AppointmentService {
 	@Produces(MediaType.TEXT_HTML)
 	public String readAppointment()
 	{	
-		return "";
+		return "p";
 	}
 	
 	@POST

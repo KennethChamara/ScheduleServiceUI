@@ -45,7 +45,7 @@ public class DoctorService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String insertDoctor(String doctorData) {
 		
-//		DoctorBean doc = new DoctorBean(doctorData);
+    //DoctorBean doc = new DoctorBean(doctorData);
 
 		JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
 

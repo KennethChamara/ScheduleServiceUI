@@ -17,7 +17,7 @@ public class DBConnection {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			// Provide the correct details: DBServer/DBName, username, password
 			connection = DriverManager
-					.getConnection("jdbc:mysql://127.0.0.1:3306/HMS?useTimezone=true&serverTimezone=UTC", "root", "");
+					.getConnection("jdbc:mysql://localhost:3306/paf", "root", "root");
 		}
 		return connection;
 

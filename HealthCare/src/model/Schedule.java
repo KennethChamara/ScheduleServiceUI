@@ -150,4 +150,28 @@ public class Schedule {
 		return output;
 	}
 
+	public List<ScheduleBean> getShedulesByDoc(int docId){
+		List<ScheduleBean> list = new ArrayList<>();
+	
+		for(ScheduleBean sch : readSchedule()){
+			if(Integer.parseInt(sch.getDoctorID())==docId) {
+				list.add(sch);
+			}		
+		}
+		
+		return list;
+	}
+	
+	public List<ScheduleBean> getShedulesByHos(int hosId){
+		List<ScheduleBean> list = new ArrayList<>();
+	
+		for(ScheduleBean sch : readSchedule()){
+			if(Integer.parseInt(sch.getHospitalID())==hosId) {
+				list.add(sch);
+			}		
+		}
+		
+		return list;
+	}
+	
 }

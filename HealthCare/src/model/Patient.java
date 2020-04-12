@@ -12,7 +12,7 @@ import beans.PatientBean;
 import util.DBConnection;
 
 
-
+                                     
 public class Patient {
 	
 	

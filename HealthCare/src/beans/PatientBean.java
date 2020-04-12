@@ -9,9 +9,7 @@ import com.google.gson.JsonParser;
 
 @XmlRootElement
 public class PatientBean {
-	
-	
-	
+		
 	 	int id;
 		private String PatientNIC;
 		private String PatientFName;

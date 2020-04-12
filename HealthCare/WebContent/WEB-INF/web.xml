@@ -28,6 +28,7 @@
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/ScheduleService/*</url-pattern>
 		<url-pattern>/PatientService/*</url-pattern>
+		<url-pattern>/AppointmentService/*</url-pattern>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 </web-app>

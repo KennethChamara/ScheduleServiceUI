@@ -18,9 +18,9 @@ public class CardPayment extends  Payment implements Serializable {
   
 
 
-	public CardPayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,
+	public CardPayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,double refundAmount,
 			String cardNumber, int expYear, int expMonth, int securityCode, String cardHoldersName) {
-		super(amount, paymentDate, refunded, refundedDate, appointmentId);
+		super(amount, paymentDate, refunded, refundedDate, appointmentId,refundAmount);
 		this.cardNumber = cardNumber;
 		this.expYear = expYear;
 		this.expMonth = expMonth;

@@ -11,9 +11,9 @@ public class OnlinePayment extends  Payment  implements Serializable{
     
     
 
-	public OnlinePayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,
+	public OnlinePayment(double amount, Date paymentDate, boolean refunded, Date refundedDate, int appointmentId,double refundAmount,
 			String onlinePaymentReferenceNumber) {
-		super(amount, paymentDate, refunded, refundedDate, appointmentId);
+		super(amount, paymentDate, refunded, refundedDate, appointmentId,refundAmount);
 		this.onlinePaymentReferenceNumber = onlinePaymentReferenceNumber;
 	}
 

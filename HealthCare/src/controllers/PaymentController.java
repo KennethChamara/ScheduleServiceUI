@@ -32,6 +32,19 @@ public class PaymentController {
 	public List<Payment> view() throws SQLException {
 		return this.paymentService.getAllPayments();
 	}
+	
+	@POST
+	@Path("refund")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public CommonResponse makeRefund(Payment payment) {
+		try {
+			this.paymentService.makeRefund(payment);
+			return CommonResponse.OK("Success");
+		} catch (Exception e) {
+			return CommonResponse.Error(e);
+		}
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

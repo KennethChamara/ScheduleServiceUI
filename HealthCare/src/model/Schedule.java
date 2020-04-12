@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.ParametersAreNullableByDefault;
+
 import beans.ScheduleBean;
 import util.DBConnection;
 
@@ -46,6 +48,19 @@ public class Schedule {
 	}
 
 	public List<ScheduleBean> readSchedule() {
+		
+				return	readSchedule(0);
+	
+	}
+	
+	public ScheduleBean readScheduleById(int id) {
+		List<ScheduleBean> list =readSchedule(id);
+			if(!list.isEmpty()) {
+				return	list.get(0);
+			}
+			return null;
+	}
+	public List<ScheduleBean> readSchedule(int id ) {
 		List<ScheduleBean> schList = new ArrayList<>();
 		try {
 			Connection con = DBConnection.connect();
@@ -54,8 +69,13 @@ public class Schedule {
 				System.out.println("Error While reading from database");
 				return schList;
 			}
-
-			String query = "select * from schedule";
+			String query;
+			if ( id==0) {
+			 query = "select * from schedule";
+			}else {
+			 query = "select * from schedule where scheduleID="+id;
+			}
+			
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
@@ -107,7 +127,7 @@ public class Schedule {
 		return output;
 	}
 
-	public String deleteSchedule(String ID) {
+	public String deleteSchedule(int ID) {
 		String output = "";
 		try {
 			Connection con = DBConnection.connect();
@@ -118,7 +138,7 @@ public class Schedule {
 			String query = "delete from schedule where scheduleID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 // binding values
-			preparedStmt.setInt(1, Integer.parseInt(ID));
+			preparedStmt.setInt(1, ID);
 // execute the statement
 			preparedStmt.execute();
 			con.close();

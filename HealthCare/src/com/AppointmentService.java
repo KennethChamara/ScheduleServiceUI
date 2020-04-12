@@ -32,7 +32,7 @@ public class AppointmentService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String insertAppointment(String appointmentData)
 	{		
-		return "";
+		return "p";
 	}
 	
 	@PUT

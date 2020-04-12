@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.PathParam;
 
 
 import com.google.gson.JsonObject;
@@ -26,8 +27,8 @@ public class PatientService {
 	
 	Patient PatientObj = new Patient();
 
-	//@RolesAllowed("admin")
 	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -35,9 +36,19 @@ public class PatientService {
 		return PatientObj.readPatient();
 	}
 
-	
-	
+
 	@PermitAll
+	@GET
+	@Path("/{PatientID}")
+	//@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public PatientBean readPatientById(@PathParam("PatientID") int id) {
+		return PatientObj.readPatientById(id);
+	}
+	
+
+	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -53,6 +64,7 @@ public class PatientService {
 	} 
 	
 	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@PUT 
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -63,8 +75,8 @@ public class PatientService {
 		return output;
 	}
 	
-
 	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@DELETE
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)

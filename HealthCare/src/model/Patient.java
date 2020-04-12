@@ -60,7 +60,55 @@ public class Patient {
 	}
 
 	
+	/*public String insertUser(PatientBean patient) {
+		String output = "";
+		try {
+			Connection con = DBConnection.connect();
+			if (con == null) {
+				return "Error while connecting to the database for inserting.";
+			}
+			// create a prepared statement
+			String query = " insert into users"
+					+ "(id,username,password,role)"
+					+ " values (?, ?, ?, ?)";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			// binding values
+			preparedStmt.setInt(1, 0);
+			preparedStmt.setString(2, patient.getPatientUsername());
+			preparedStmt.setString(3, patient.getPatientPassword());
+			preparedStmt.setString(4, patient.getPatientRole());
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+			output = "Inserted successfully";
+		} catch (Exception e) {
+			output = "Error while inserting the patient.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}*/
+
+	
+	
 	public List<PatientBean> readPatient() {
+		
+		return	readPatient(0);
+
+	}
+	
+	public PatientBean readPatientById(int id) {
+	List<PatientBean> list =readPatient(id);
+		if(!list.isEmpty()) {
+			return	list.get(0);
+		}
+		return null;
+	}
+
+
+	
+
+	
+	public List<PatientBean> readPatient(int id) {
 		List <PatientBean> patientList = new ArrayList<>();
 		try {
 			Connection con = DBConnection.connect();
@@ -69,7 +117,12 @@ public class Patient {
 				return patientList;
 			}
 	
-			String query = "select * from patient";
+			String query;
+			if ( id==0) {
+			query= "select * from patient";
+			}else {
+				query = "select * from patient where PatientID="+id;
+			}
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			// iterate through the rows in the result set
@@ -105,6 +158,7 @@ public class Patient {
 		return patientList;
 	}
 	
+
 	
 	
 	public String updatePatient(PatientBean patient) {
@@ -174,5 +228,10 @@ public class Patient {
 		}
 		return output;
 	}
+
+
+	
+	
+	
 
 }

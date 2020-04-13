@@ -38,6 +38,7 @@ public class DoctorService {
 	
 	
 	
+	
 	//Insert a Doctor
 	@POST
 	@Path("/")
@@ -72,6 +73,7 @@ public class DoctorService {
 		String output =	objDoctor.insertDoctor(dFname,dLname,dNIC,dPhone,dEmail,dAdline1,dAdline2,dAdline3,dCity,dSpeciality,dWorkinghospital,dBank,dCardtype,dCardno,dCharge);
 		return output;
 	} 
+	
 	
 	
 	//Update a Doctor

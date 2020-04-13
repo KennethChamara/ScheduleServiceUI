@@ -43,6 +43,7 @@ public class AppointmentService {
 		
 		appbean =  new AppointmentBean();
 		
+		//get values into variables in AppointmentBean to appbean object
 		appbean.setCheckedStatus(AppointmentObject.get("CheckedStatus").getAsString());
 		appbean.setTokenNumber(AppointmentObject.get("TokenNumber").getAsInt());
 		appbean.setAnotherPatientStatus(AppointmentObject.get("AnotherPatientStatus").getAsString());
@@ -53,7 +54,8 @@ public class AppointmentService {
 		appbean.setD_ID(AppointmentObject.get("d_ID").getAsInt());
 		appbean.setSheduleID(AppointmentObject.get("SheduleID").getAsInt());
 		appbean.setHospitalID(AppointmentObject.get("HospitalID").getAsInt());
-		
+		appbean.setBookedDate(AppointmentObject.get("BookedDate").getAsString());
+		appbean.setPaymentType(AppointmentObject.get("PaymentType").getAsString());
 		String output = appointmentObj.insertAppointment(appbean);
 		return output;
 	}
@@ -80,7 +82,8 @@ public class AppointmentService {
 		appbean.setD_ID(AppointmentObject.get("d_ID").getAsInt());
 		appbean.setSheduleID(AppointmentObject.get("SheduleID").getAsInt());
 		appbean.setHospitalID(AppointmentObject.get("HospitalID").getAsInt());
-		
+		appbean.setBookedDate(AppointmentObject.get("BookedDate").getAsString());
+		appbean.setBookedDate(AppointmentObject.get("AddedDate").getAsString());
 		String output = appointmentObj.updateAppointment(appbean);
 		return output;
 		

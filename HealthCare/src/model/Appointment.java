@@ -1,16 +1,28 @@
 package model;
 
+
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import beans.AppointmentBean;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import util.DBConnection;
 
 public class Appointment {
 	
 	public String output;
 	private Connection con;
+	private String query;
+	private PreparedStatement preparedStmt;
+	private int LastAppointmentID;
+	
+	
 	
 	public String readAppointment() {		
 		output = "";
@@ -37,7 +49,7 @@ public class Appointment {
 					 "<th>HospitalID</th>"+
 					 "</tr>";
 			
-			String query = "SELECT * FROM appointment";
+			query = "SELECT * FROM appointment";
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			
@@ -89,6 +101,7 @@ public class Appointment {
 		output = "";
 		
 		try {
+			
 			 con = DBConnection.connect();
 			 
 			if (con == null) {
@@ -96,9 +109,9 @@ public class Appointment {
 			}
 			
 			// create a prepared statement
-			String query = "INSERT INTO appointment ( CheckedStatus, TokenNumber, AnotherPatientStatus, AnotherPatientNIC, AnotherPatientName, AnotherPatientEmail, AnotherPatientContactNumber, d_ID, SheduleID, HospitalID) "+ 
-					" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-			PreparedStatement preparedStmt = con.prepareStatement(query);
+			query = "INSERT INTO appointment ( CheckedStatus, TokenNumber, AnotherPatientStatus, AnotherPatientNIC, AnotherPatientName, AnotherPatientEmail, AnotherPatientContactNumber, d_ID, SheduleID, HospitalID,BookedDate,AddedDate) "+ 
+					" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,CURDATE());";
+			preparedStmt = con.prepareStatement(query);
 			// binding values				
 			preparedStmt.setString(1, appointment.getCheckedStatus());
 			preparedStmt.setInt(2, appointment.getTokenNumber());
@@ -109,14 +122,20 @@ public class Appointment {
 			preparedStmt.setString(7, appointment.getAnotherPatientContactNumber());
 			preparedStmt.setInt(8, appointment.getD_ID());
 			preparedStmt.setInt(9, appointment.getSheduleID());
-			preparedStmt.setInt(10, appointment.getHospitalID());				
+			preparedStmt.setInt(10, appointment.getHospitalID());
+			preparedStmt.setString(11, appointment.getBookedDate());
 
 			// execute the statement
 			preparedStmt.execute();
 			
-			con.close();
-			
-			output = "Inserted successfully";
+			//get the AppointmentID of the current inserted row & assign it to LastAppointmentID variable
+			GetAppointmentIdOfRecentInsert(con);
+			GetInsertSeviveFromPayment(appointment);
+			//insert into related Payment Tables 
+			//GetInsertSeviveFromPayment(appointment.getPaymentType());
+			 con.close();
+			output = "Inserted successfully to Appointment";
+		    
 			
 		} catch (Exception e) {
 			output = "Error while inserting the Appointment.";
@@ -124,11 +143,47 @@ public class Appointment {
 		}
 		return output;
 	}
+	
+	public void GetAppointmentIdOfRecentInsert(Connection con) {		
 		
-	  
+		try {			
+			query = "SELECT AppointmentID FROM paf.appointment ORDER BY AppointmentID DESC LIMIT 1;";
+			preparedStmt = con.prepareStatement(query);
+			ResultSet rs = preparedStmt.executeQuery(query);			
+			// iterate through the rows in the result set			
+			while (rs.next()) {
+				LastAppointmentID = rs.getInt("AppointmentID");
+			}
+		}catch (Exception e) {
+			System.out.println("Error In Fetching Last Row of Appointment Table ");
+		}
+		
+	}
+	
+	//this method call payment API and insert appointment details to  payment table
+	public String  GetInsertSeviveFromPayment(AppointmentBean appointment)
+	{
+		try {
+		MediaType JSONType = MediaType.get("application/json; charset=utf-8");
+		OkHttpClient client = new OkHttpClient();			
+		RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+LastAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"'}",JSONType);
+		Request request = new Request.Builder()
+			        .url("http://localhost:8081/HealthCare/api/payment/insertPaymentFromAppointment")
+			        .post(body)
+			        .build();
+		
+		 try (Response response = client.newCall(request).execute()) {
+			 return response.body().string();
+		 }
+		}catch (Exception e) {
+			System.out.println("Error in GetInsertSeviveFromPayment " + e);
+		}
+		return "Inserted Successfull to payment";
+	}
 	 
+	
 		
-  public String updateAppointment(AppointmentBean appointment) {
+	public String updateAppointment(AppointmentBean appointment) {
 	
 	   output = "";
 	   
@@ -140,7 +195,7 @@ public class Appointment {
 			}
 			
 			// create a prepared statement
-			String query = " UPDATE appointment SET "+
+			query = " UPDATE appointment SET "+
 						   " CheckedStatus=?, "+
 						   " TokenNumber = ?,"+
 							" AnotherPatientStatus=?, "+
@@ -151,9 +206,11 @@ public class Appointment {
 							" d_ID = ?, "+
 							" SheduleID = ?, "+
 							" HospitalID =? "+
+							" BookedDate = ? "+
+							" AddedDate = ?	"+							
 							" WHERE AppointmentID = ? ;";
 			
-			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt = con.prepareStatement(query);
 			// binding values				
 			preparedStmt.setString(1, appointment.getCheckedStatus());
 			preparedStmt.setInt(2, appointment.getTokenNumber());
@@ -165,10 +222,12 @@ public class Appointment {
 			preparedStmt.setInt(8, appointment.getD_ID());
 			preparedStmt.setInt(9, appointment.getSheduleID());
 			preparedStmt.setInt(10, appointment.getHospitalID());	
-			preparedStmt.setInt(11, appointment.getAppointmentID());	
+			preparedStmt.setString(11, appointment.getBookedDate());
+			preparedStmt.setString(12, appointment.getAddedDate());
+			preparedStmt.setInt(13, appointment.getAppointmentID());	
 
 			// execute the statement
-			preparedStmt.executeUpdate();
+			preparedStmt.executeUpdate();	
 			
 			con.close();
 			
@@ -193,8 +252,8 @@ public class Appointment {
 					return "Error while connecting to the database for Deleting.";
 				}
 				// create a prepared statement
-				String query = " DELETE FROM appointment where AppointmentID = ?";
-				PreparedStatement preparedStmt = con.prepareStatement(query);
+				query = " DELETE FROM appointment where AppointmentID = ?";
+				preparedStmt = con.prepareStatement(query);
 				// binding values					
 				preparedStmt.setInt(1, appointment.getAppointmentID());	
 				// execute the statement

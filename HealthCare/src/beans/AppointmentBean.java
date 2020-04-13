@@ -12,7 +12,23 @@ public class AppointmentBean {
 	private String AnotherPatientName  ;
 	private String AnotherPatientEmail ; 
 	private String AnotherPatientContactNumber ;
+	private String BookedDate;
+	private String AddedDate;
+	private String PaymentType;
 	
+	
+	public String getBookedDate() {
+		return BookedDate;
+	}
+	public void setBookedDate(String bookedDate) {
+		BookedDate = bookedDate;
+	}
+	public String getAddedDate() {
+		return AddedDate;
+	}
+	public void setAddedDate(String addedDate) {
+		AddedDate = addedDate;
+	}
 	public int getAppointmentID() {
 		return AppointmentID;
 	}
@@ -79,6 +95,12 @@ public class AppointmentBean {
 	}
 	public void setAnotherPatientContactNumber(String anotherPatientContactNumber) {
 		AnotherPatientContactNumber = anotherPatientContactNumber;
+	}
+	public String getPaymentType() {
+		return PaymentType;
+	}
+	public void setPaymentType(String paymentType) {
+		PaymentType = paymentType;
 	} 
 
 	

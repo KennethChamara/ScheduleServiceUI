@@ -8,27 +8,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.ParametersAreNullableByDefault;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import beans.ScheduleBean;
 import util.DBConnection;
 
 public class Schedule {
 
-	public String insertScedule(ScheduleBean sch) {
-		String output = "";
+	public Response insertScedule(ScheduleBean sch ,UriInfo uri) {
+		
+		Response response;
+		String output = "{\"status\":\"success\"}";
+		 int key=kenGen();
 		try {
 			Connection con = DBConnection.connect();
 			if (con == null) {
-				return "Error while connecting to the database for inserting.";
+				output = "{\"status\":\"Connection faild\"}";
+				return Response.status(Status.INTERNAL_SERVER_ERROR)
+						.entity(output).build();
 			}
 			// create a prepared statement
 			String query = " insert into schedule"
 					+ "(scheduleID,doctorID,hospitalID,st_time,end_time,day_of_wk,status)"
 					+ " values (?, ?, ?, ?, ?, ?, ?)";
 
+			
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
-			preparedStmt.setInt(1, 0);
+			preparedStmt.setInt(1,key);
 			preparedStmt.setInt(2, Integer.parseInt(sch.getDoctorID()));
 			preparedStmt.setInt(3, Integer.parseInt(sch.getHospitalID()));
 			preparedStmt.setString(4, sch.getStTime());
@@ -38,13 +48,19 @@ public class Schedule {
 
 //execute the statement
 			preparedStmt.execute();
+			output = "{\"status\":\"success\"}";
+			response = Response.created(uri.getAbsolutePathBuilder().path(""+key).build())
+			.entity(output).build();
 			con.close();
-			output = "Inserted successfully";
 		} catch (Exception e) {
-			output = "Error while inserting the schedule.";
+			output = "{\"status\":"+e.getMessage()+"}";
+			response=Response.status(Status.INTERNAL_SERVER_ERROR)
+			.entity(output).build();
 			System.err.println(e.getMessage());
 		}
-		return output;
+		
+		
+		return response;
 	}
 
 	public List<ScheduleBean> readSchedule() {
@@ -96,12 +112,16 @@ public class Schedule {
 		return schList;
 	}
 
-	public String updateSchedule(ScheduleBean sch) {
+	public Response updateSchedule(ScheduleBean sch ,UriInfo uri) {
 		String output = "";
+		
+		Response response;
 		try {
 			Connection con = DBConnection.connect();
 			if (con == null) {
-				return "Error while connecting to the database for updating.";
+				output = "{\"status\":\"Connection faild\"}";
+				return Response.status(Status.INTERNAL_SERVER_ERROR)
+						.entity(output).build();
 			}
 // create a prepared statement
 			String query = "UPDATE schedule SET" + " doctorID=?," + "hospitalID=?," + "st_time=?," + "end_time=?,"
@@ -119,20 +139,27 @@ public class Schedule {
 // execute the statement
 			preparedStmt.execute();
 			con.close();
-			output = "Updated successfully";
+			output = "{\"status\":\"success\"}";
+			response = Response.accepted(uri.getAbsolutePathBuilder().path(""+sch.getId()).build())
+			.entity(output).build();
 		} catch (Exception e) {
-			output = "Error while updating the schedule.";
+			output = "{\"status\":"+e.getMessage()+"}";
+			response=Response.status(Status.INTERNAL_SERVER_ERROR)
+			.entity(output).build();
 			System.err.println(e.getMessage());
 		}
-		return output;
+		return response;
 	}
 
-	public String deleteSchedule(int ID) {
+	public Response deleteSchedule(int ID) {
 		String output = "";
+		Response response;
 		try {
 			Connection con = DBConnection.connect();
 			if (con == null) {
-				return "Error while connecting to the database for deleting.";
+				output = "{\"status\":\"Connection faild\"}";
+				return Response.status(Status.INTERNAL_SERVER_ERROR)
+						.entity(output).build();
 			}
 // create a prepared statement
 			String query = "delete from schedule where scheduleID=?";
@@ -142,12 +169,16 @@ public class Schedule {
 // execute the statement
 			preparedStmt.execute();
 			con.close();
-			output = "Deleted successfully";
+			output = "{\"status\":\"success\"}";
+			response = Response.status(Status.ACCEPTED)
+			.entity(output).build();
 		} catch (Exception e) {
-			output = "Error while deleting the schedule.";
+			output = "{\"status\":"+e.getMessage()+"}";
+			response=Response.status(Status.INTERNAL_SERVER_ERROR)
+			.entity(output).build();
 			System.err.println(e.getMessage());
 		}
-		return output;
+		return response;
 	}
 
 	public List<ScheduleBean> getShedulesByDoc(int docId){
@@ -174,16 +205,29 @@ public class Schedule {
 		return list;
 	}
 	
-	public List<ScheduleBean> getShedulesByHos(String day){
+	public List<ScheduleBean> getShedulesByDay(String day){
 		List<ScheduleBean> list = new ArrayList<>();
 	
 		for(ScheduleBean sch : readSchedule()){
-			if(sch.getDay_of_wk()==day) {
+			if(day.equals(sch.getDay_of_wk())) {
 				list.add(sch);
 			}		
 		}
 		
 		return list;
 	}
+	
+	public int kenGen(){
+		List<ScheduleBean> list = new ArrayList<>();
+		int id =0 ;
+		for(ScheduleBean sch : readSchedule()){
+			if(id<sch.getId()) {
+			 id =sch.getId();
+			}		
+		}
+		return id+1;
+	}
+	
+	
 	
 }

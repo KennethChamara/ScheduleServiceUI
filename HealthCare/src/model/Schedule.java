@@ -174,4 +174,16 @@ public class Schedule {
 		return list;
 	}
 	
+	public List<ScheduleBean> getShedulesByHos(String day){
+		List<ScheduleBean> list = new ArrayList<>();
+	
+		for(ScheduleBean sch : readSchedule()){
+			if(sch.getDay_of_wk()==day) {
+				list.add(sch);
+			}		
+		}
+		
+		return list;
+	}
+	
 }

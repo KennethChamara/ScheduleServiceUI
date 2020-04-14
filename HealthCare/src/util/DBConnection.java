@@ -20,7 +20,8 @@ public class DBConnection {
 					.getConnection("jdbc:mysql://localhost:3306/paf", "root", "root");
 		}
 		return connection;
-
+  
+		
 	}
 
 }

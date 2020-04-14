@@ -1,16 +1,24 @@
 package com;
 
-//For REST Service
-import javax.ws.rs.*;
+import java.util.List;     
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Consumes; 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-//For JSON
-import com.google.gson.*;
-//For XML
-import org.jsoup.*;
-import org.jsoup.parser.*;
-import org.jsoup.nodes.Document;
+import javax.ws.rs.PathParam;
 
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import beans.PatientBean;
 import model.Patient;
 
 @Path("/Patients")
@@ -19,78 +27,56 @@ public class PatientService {
 	
 	Patient PatientObj = new Patient();
 
+	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@GET
 	@Path("/")
-	@Produces(MediaType.TEXT_HTML)
-	public String readPatient() {
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PatientBean> readPatient() {
 		return PatientObj.readPatient();
 	}
 
+
+	@PermitAll
+	@GET
+	@Path("/{PatientID}")
+	//@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public PatientBean readPatientById(@PathParam("PatientID") int id) {
+		return PatientObj.readPatientById(id);
+	}
 	
-	
-	//insert
+
+	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String insertPatient(String PatientData) {
 		
-		JsonObject PatientObject = new JsonParser().parse(PatientData).getAsJsonObject();
+		PatientBean patient = new PatientBean(PatientData);	
 		
-		
-		String PatientNIC = PatientObject.get("PatientNIC").getAsString();
-		String PatientFName = PatientObject.get("PatientFName").getAsString();
-		String PatientLName = PatientObject.get("PatientLName").getAsString();
-		String PatientGender = PatientObject.get("PatientGender").getAsString();
-		String PatientPhone = PatientObject.get("PatientPhone").getAsString();
-		String PatientBloodGroup = PatientObject.get("PatientBloodGroup").getAsString();
-		String PatientMaritalStatus = PatientObject.get("PatientMaritalStatus").getAsString();
-		String Patient_Add_Line1 = PatientObject.get("Patient_Add_Line1").getAsString();
-		String Patient_Add_Line2 = PatientObject.get("Patient_Add_Line2").getAsString();
-		String Patient_Add_Line3 = PatientObject.get("Patient_Add_Line3").getAsString();
-		String Patient_Add_City = PatientObject.get("Patient_Add_City").getAsString();
-		String PatientDOB = PatientObject.get("PatientDOB").getAsString();
-		String PatientEmail = PatientObject.get("PatientEmail").getAsString();
-		String PatientUsername = PatientObject.get("PatientUsername").getAsString();
-		String PatientPassword = PatientObject.get("PatientPassword").getAsString();
-		
-		
-		String output = PatientObj.insertPatient(PatientNIC, PatientFName,PatientLName, PatientGender,PatientPhone, PatientBloodGroup,PatientMaritalStatus, Patient_Add_Line1,Patient_Add_Line2, Patient_Add_Line3, Patient_Add_City, PatientDOB,PatientEmail, PatientUsername,PatientPassword);
-		return output;
+		String output = PatientObj.insertPatient(patient);
+				return output;
 		
 		
 	} 
 	
+	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@PUT 
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String updatePatient(String PatientData) {
-		// Convert the input string to a JSON object
-		JsonObject PatientObject = new JsonParser().parse(PatientData).getAsJsonObject();
-		// Read the values from the JSON object
-		String PatientID = PatientObject.get("PatientID").getAsString();
-		String PatientNIC = PatientObject.get("PatientNIC").getAsString();
-		String PatientFName = PatientObject.get("PatientFName").getAsString();
-		String PatientLName = PatientObject.get("PatientLName").getAsString();
-		String PatientGender = PatientObject.get("PatientGender").getAsString();
-		String PatientPhone = PatientObject.get("PatientPhone").getAsString();
-		String PatientBloodGroup = PatientObject.get("PatientBloodGroup").getAsString();
-		String PatientMaritalStatus = PatientObject.get("PatientMaritalStatus").getAsString();
-		String Patient_Add_Line1 = PatientObject.get("Patient_Add_Line1").getAsString();
-		String Patient_Add_Line2 = PatientObject.get("Patient_Add_Line2").getAsString();
-		String Patient_Add_Line3 = PatientObject.get("Patient_Add_Line3").getAsString();
-		String Patient_Add_City = PatientObject.get("Patient_Add_City").getAsString();
-		String PatientDOB = PatientObject.get("PatientDOB").getAsString();
-		String PatientEmail = PatientObject.get("PatientEmail").getAsString();
-		String PatientUsername = PatientObject.get("PatientUsername").getAsString();
-		String PatientPassword = PatientObject.get("PatientPassword").getAsString();
-		String output = PatientObj.updatePatient(PatientID,PatientNIC, PatientFName,PatientLName, PatientGender,PatientPhone, PatientBloodGroup,PatientMaritalStatus, Patient_Add_Line1,Patient_Add_Line2, Patient_Add_Line3, Patient_Add_City, PatientDOB,PatientEmail, PatientUsername,PatientPassword);
+		PatientBean patient = new PatientBean(PatientData);
+		String output =	PatientObj.updatePatient(patient);
 		return output;
 	}
 	
-
-	
+	@PermitAll
+	//@RolesAllowed({"admin","patient"})
 	@DELETE
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)

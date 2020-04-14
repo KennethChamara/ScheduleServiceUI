@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 
-//this is doctor bean
 @XmlRootElement
 public class DoctorBean {
 

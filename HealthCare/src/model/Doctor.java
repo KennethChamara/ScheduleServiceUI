@@ -8,7 +8,7 @@ import util.DBConnection;
 
 public class Doctor {
 		
-	
+
 	
 	//Insert a Doctor
 //	public String insertDoctor(DoctorBean dct) {

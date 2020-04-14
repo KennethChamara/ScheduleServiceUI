@@ -50,6 +50,7 @@ public class DoctorService {
 
 		JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
 
+	
 		
 		String dFname = doctorObject.get("d_fname").getAsString();
 		String dLname = doctorObject.get("d_lname").getAsString();

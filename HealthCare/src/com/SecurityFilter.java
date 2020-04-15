@@ -1,6 +1,6 @@
 package com;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Method; 
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ import javax.annotation.security.PermitAll;
 import model.AuthUser;
 
 
-//@Provider
+@Provider
 public class SecurityFilter implements ContainerRequestFilter {
 	public static final String AUTHENTICATION_HEADER_KEY = "Authorization";
 	public static final String AUTHENTICATION_HEADER_PREFIX = "Basic ";
@@ -47,7 +47,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 	            {
 	            	Response unauthoriazedStatus = Response
 							.status(Response.Status.UNAUTHORIZED)
-							.entity("{\"error\" : \"not allowed\"}")
+							.entity("{\"error\" : \"not allowed 2\"}")
 							.build();
 	            		requestContext.abortWith(unauthoriazedStatus);
 	            }
@@ -78,7 +78,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 	                {
 	                	Response unauthoriazedStatus = Response
 								.status(Response.Status.UNAUTHORIZED)
-								.entity("{\"error\" : \"not authorized\"}")
+								.entity("{\"error\" : \"not authorized 3\"}")
 								.build();
 	                	requestContext.abortWith(unauthoriazedStatus);
 	                   
@@ -92,8 +92,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 	        }
 		Response unauthoriazedStatus = Response
 											.status(Response.Status.UNAUTHORIZED)
-											.entity("{\"error\" : \"not authorized\"}")
-											.build();
+											.entity("{\"error\" : \"not authorized 1\"}")
+											.build(); 
 		requestContext.abortWith(unauthoriazedStatus);
 	        
 	}

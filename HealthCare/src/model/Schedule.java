@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ParametersAreNullableByDefault;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
@@ -218,7 +216,6 @@ public class Schedule {
 	}
 	
 	public int kenGen(){
-		List<ScheduleBean> list = new ArrayList<>();
 		int id =0 ;
 		for(ScheduleBean sch : readSchedule()){
 			if(id<sch.getId()) {
@@ -227,7 +224,5 @@ public class Schedule {
 		}
 		return id+1;
 	}
-	
-	
 	
 }

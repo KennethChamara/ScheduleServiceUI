@@ -1,7 +1,6 @@
 package com;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -18,10 +17,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import beans.ScheduleBean;
 import model.Schedule;
@@ -67,7 +62,7 @@ public class ScheduleService {
 		return Response.noContent().build(); 
 	}
 	
-	@RolesAllowed({"admin","docters"})
+	@RolesAllowed("docters")
 	@GET
 	@Path("/{scheduleID}")
 	@Produces(MediaType.APPLICATION_JSON)

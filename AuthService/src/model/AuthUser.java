@@ -43,17 +43,20 @@ public class AuthUser {
      				
      				System.err.println(e.getMessage());
      			}
-         System.out.println(user +" "+psw );
+         
          if(username.equals(user) && password.equals(psw))
          {
               
              //Step 2. Verify user role
              if(rolesSet.contains(role))
              {
+            	 
                  isAllowed = true;
+                 System.out.println(username +" "+password );
              }
          }
          return isAllowed;
+         
      }
 
 }

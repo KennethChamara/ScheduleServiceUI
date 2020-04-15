@@ -1,6 +1,6 @@
 package com;
 
-import java.lang.reflect.Method;  
+import java.lang.reflect.Method; 
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -11,28 +11,19 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.json.JSONObject;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 
 
+
+import model.AuthUser;
 
 
 @Provider
@@ -83,31 +74,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 	                Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
 	                  
 	                //Is user valid?
-	                
-	                ClientConfig clientConfig = new ClientConfig();
-	                HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username,password);
-	                clientConfig.register( feature) ;
-	             
-	                clientConfig.register(JacksonFeature.class);
-	             
-	                Client client = ClientBuilder.newClient( clientConfig );
-	                WebTarget webTarget;
-	                
-	                if(rolesSet.contains("admin")) {
-	                 webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/admin");
-	                 
-	                } else if (rolesSet.contains("doctor")) {
-               		webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/doctor");
-	                } else{
-                		webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/patient");
-	                }
-	                
-	                
-	                Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-	                
-	                Response response = invocationBuilder.get();
-	                  
-	                if(response.getStatus()!=200)
+	                if( ! AuthUser.isUserAllowed(username, password, rolesSet))
 	                {
 	                	Response unauthoriazedStatus = Response
 								.status(Response.Status.UNAUTHORIZED)
@@ -118,7 +85,9 @@ public class SecurityFilter implements ContainerRequestFilter {
 	                }
 	                return;
 	            }
-										
+			
+				
+			
 		}
 	        }
 		Response unauthoriazedStatus = Response

@@ -43,7 +43,7 @@ public class AuthUser {
      				
      				System.err.println(e.getMessage());
      			}
-         
+         System.out.println(user +" "+psw );
          if(username.equals(user) && password.equals(psw))
          {
               

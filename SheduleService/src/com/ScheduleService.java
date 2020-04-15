@@ -26,7 +26,7 @@ public class ScheduleService {
 	
 	Schedule scheduleObj = new Schedule();
 	
-	@RolesAllowed({"admin","docters"})
+	@RolesAllowed("admin")
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ public class ScheduleService {
 		return Response.noContent().build(); 
 	}
 	
-	@RolesAllowed("docters")
+	@RolesAllowed({"docters","admin"})
 	@GET
 	@Path("/{scheduleID}")
 	@Produces(MediaType.APPLICATION_JSON)

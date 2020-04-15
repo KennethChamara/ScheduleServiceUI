@@ -47,6 +47,8 @@ public class Appointment {
 					 "<th>d_ID</th>"+
 					 "<th>SheduleID</th>"+
 					 "<th>HospitalID</th>"+
+					 "<th>Added Date</th>"+
+					 "<th>Booked Date</th>"+
 					 "</tr>";
 			
 			query = "SELECT * FROM appointment";
@@ -67,9 +69,10 @@ public class Appointment {
 				appBeanRead.setD_ID(rs.getInt("d_ID"));
 				appBeanRead.setSheduleID(rs.getInt("SheduleID"));
 				appBeanRead.setHospitalID(rs.getInt("HospitalID"));
-
+				appBeanRead.setAddedDate(rs.getString("AddedDate"));
+				appBeanRead.setBookedDate(rs.getString("BookedDate"));
 				
-				// Add into the html table
+				// Add into the HTML table
 				output += "<tr><td>" + appBeanRead.getAppointmentID() + "</td>";
 				output += "<td>" + appBeanRead.getCheckedStatus() + "</td>";
 				output += "<td>" + appBeanRead.getTokenNumber()+ "</td>";
@@ -80,8 +83,9 @@ public class Appointment {
 				output += "<td>" + appBeanRead.getAnotherPatientContactNumber()+ "</td>";
 				output += "<td>" + appBeanRead.getD_ID() + "</td>";
 				output += "<td>" + appBeanRead.getSheduleID() + "</td>";
-				output += "<td>" + appBeanRead.getHospitalID() + "</td></tr>";		
-				
+				output += "<td>" + appBeanRead.getHospitalID() + "</td>";		
+				output += "<td>" + appBeanRead.getAddedDate() + "</td>";
+				output += "<td>" + appBeanRead.getBookedDate() + "</td></tr>";	
 				
 			}
 			con.close();
@@ -147,7 +151,7 @@ public class Appointment {
 	public void GetAppointmentIdOfRecentInsert(Connection con) {		
 		
 		try {			
-			query = "SELECT AppointmentID FROM paf.appointment ORDER BY AppointmentID DESC LIMIT 1;";
+			query = "SELECT AppointmentID FROM appointment ORDER BY AppointmentID DESC LIMIT 1;";
 			preparedStmt = con.prepareStatement(query);
 			ResultSet rs = preparedStmt.executeQuery(query);			
 			// iterate through the rows in the result set			
@@ -205,8 +209,8 @@ public class Appointment {
 							" AnotherPatientContactNumber = ?, "+
 							" d_ID = ?, "+
 							" SheduleID = ?, "+
-							" HospitalID =? "+
-							" BookedDate = ? "+
+							" HospitalID =?, "+
+							" BookedDate = ?, "+
 							" AddedDate = ?	"+							
 							" WHERE AppointmentID = ? ;";
 			

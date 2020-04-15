@@ -1,8 +1,11 @@
 package beans;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class AppointmentBean {
 	private int AppointmentID ;
-	private int d_ID  ;
+	private int d_ID;
 	private int SheduleID;
 	private int HospitalID;
 	private String CheckedStatus;  
@@ -15,7 +18,7 @@ public class AppointmentBean {
 	private String BookedDate;
 	private String AddedDate;
 	private String PaymentType;
-	
+	private JsonObject AppointmentObject;
 	
 	public String getBookedDate() {
 		return BookedDate;
@@ -37,7 +40,8 @@ public class AppointmentBean {
 	}
 	public int getD_ID() {
 		return d_ID;
-	}
+	}		
+	
 	public void setD_ID(int d_ID) {
 		this.d_ID = d_ID;
 	}
@@ -103,6 +107,47 @@ public class AppointmentBean {
 		PaymentType = paymentType;
 	} 
 
+	public void convertStringToJSONInsert(String appointmentData) {
+		//convert string to JSON object and assign to variables in the class
+		AppointmentObject  = new JsonParser().parse(appointmentData).getAsJsonObject(); 		
+		setCheckedStatus(AppointmentObject.get("CheckedStatus").getAsString());
+		setTokenNumber(AppointmentObject.get("TokenNumber").getAsInt());
+		setAnotherPatientStatus(AppointmentObject.get("AnotherPatientStatus").getAsString());
+		setAnotherPatientNIC(AppointmentObject.get("AnotherPatientNIC").getAsString());
+		setAnotherPatientName(AppointmentObject.get("AnotherPatientName").getAsString());
+		setAnotherPatientEmail(AppointmentObject.get("AnotherPatientEmail").getAsString());
+		setAnotherPatientContactNumber(AppointmentObject.get("AnotherPatientContactNumber").getAsString());
+		setD_ID(AppointmentObject.get("d_ID").getAsInt());
+		setSheduleID(AppointmentObject.get("SheduleID").getAsInt());
+		setHospitalID(AppointmentObject.get("HospitalID").getAsInt());
+		setBookedDate(AppointmentObject.get("BookedDate").getAsString());
+		setPaymentType(AppointmentObject.get("PaymentType").getAsString());
+	}
+	
+	public void convertStringToJSONUpdate(String appointmentData) {
+		//convert string to JSON object and assign to variables in the class
+		AppointmentObject  = new JsonParser().parse(appointmentData).getAsJsonObject(); 		
+		setAppointmentID(AppointmentObject.get("AppointmentID").getAsInt());
+		setCheckedStatus(AppointmentObject.get("CheckedStatus").getAsString());
+		setTokenNumber(AppointmentObject.get("TokenNumber").getAsInt());
+		setAnotherPatientStatus(AppointmentObject.get("AnotherPatientStatus").getAsString());
+		setAnotherPatientNIC(AppointmentObject.get("AnotherPatientNIC").getAsString());
+		setAnotherPatientName(AppointmentObject.get("AnotherPatientName").getAsString());
+		setAnotherPatientEmail(AppointmentObject.get("AnotherPatientEmail").getAsString());
+		setAnotherPatientContactNumber(AppointmentObject.get("AnotherPatientContactNumber").getAsString());
+		setD_ID(AppointmentObject.get("d_ID").getAsInt());
+		setSheduleID(AppointmentObject.get("SheduleID").getAsInt());
+		setHospitalID(AppointmentObject.get("HospitalID").getAsInt());
+		setBookedDate(AppointmentObject.get("BookedDate").getAsString());
+		setAddedDate(AppointmentObject.get("AddedDate").getAsString());
+		
+	}
+	
+	public void convertStringToJSONDelete(String appointmentData) {
+		//convert string to JSON object and assign to variables in the class
+		AppointmentObject  = new JsonParser().parse(appointmentData).getAsJsonObject(); 		
+		setAppointmentID(AppointmentObject.get("AppointmentID").getAsInt());
+	}
 	
 
 

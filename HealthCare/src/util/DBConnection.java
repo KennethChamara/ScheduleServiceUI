@@ -17,10 +17,15 @@ public class DBConnection {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			// Provide the correct details: DBServer/DBName, username, password
 			connection = DriverManager
+
 					.getConnection("jdbc:mysql://localhost:3306/paf", "root", "root");
+
+					.getConnection("jdbc:mysql://localhost:3306/hms?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+
 		}
 		return connection;
-
+  
+		
 	}
 
 }

@@ -113,7 +113,7 @@ public class AuthService {
 			
 	}
 	
-	@RolesAllowed({"doctor"})
+	@RolesAllowed({"doctor","admin"})
 	@GET
 	@Path("/doctor")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ public class AuthService {
 				
 	}
 	
-	@RolesAllowed({"patient"})
+	@RolesAllowed({"patient","admin"})
 	@GET
 	@Path("/patient")
 	@Produces(MediaType.APPLICATION_JSON)

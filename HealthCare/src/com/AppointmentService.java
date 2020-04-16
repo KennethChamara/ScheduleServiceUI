@@ -8,31 +8,37 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import com.google.gson.JsonObject;
-
+import beans.AppointmentBean;
 import model.Appointment;
 
 @Path("/Appointment")
 public class AppointmentService {
 
 	Appointment appointmentObj = new Appointment();
+	AppointmentBean appbean ;
 	
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
 	public String readAppointment()
 	{	
-		return "p";
+		String output = appointmentObj.readAppointment();
+		return output;
 	}
 	
+
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String insertAppointment(String appointmentData)
-	{		
-		return "p";
+	{	
+		//create object of AppointmentBean class to save the values for the variables			
+		appbean =  new AppointmentBean();
+		//convert string to JSON object and assign to variables in the class
+		appbean.convertStringToJSONInsert(appointmentData);
+		String output = appointmentObj.insertAppointment(appbean);
+		return output;
 	}
 	
 	@PUT
@@ -41,11 +47,28 @@ public class AppointmentService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String updateAppointment(String appointmentData)
 	{
+		//create object of AppointmentBean class to save the values for the variables			
+		appbean =  new AppointmentBean();
+		//convert string to JSON object and assign to variables in the class
+		appbean.convertStringToJSONUpdate(appointmentData);		
+		String output = appointmentObj.updateAppointment(appbean);
+		return output;
 		
-		return "";
 	}
 
-
+	@DELETE
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteItem(String appointmentData)
+	{		
+		//create object of AppointmentBean class to save the values for the variables			
+		appbean =  new AppointmentBean();
+		//convert string to JSON object and assign to variables in the class
+		appbean.convertStringToJSONDelete(appointmentData);			
+		String output = appointmentObj.deleteAppointement(appbean);
+		return output;
+	}
 	
 	
 }

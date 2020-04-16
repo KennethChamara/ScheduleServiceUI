@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Connection; 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
 
-import beans.ScheduleBean;
+
+import beans.UserBean;
+
+import javax.ws.rs.core.Response.Status;
+
 import util.DBConnection;
 
-public class Schedule {
-
-	public Response insertScedule(ScheduleBean sch ,UriInfo uri) {
+public class AuthModel {
+public Response insertUsers(UserBean user ) {
 		
 		Response response;
 		String output = "{\"status\":\"success\"}";
-		 int key=kenGen();
 		try {
 			Connection con = DBConnection.connect();
 			if (con == null) {
@@ -29,25 +29,22 @@ public class Schedule {
 						.entity(output).build();
 			}
 			// create a prepared statement
-			String query = " insert into schedule"
-					+ "(scheduleID,doctorID,hospitalID,st_time,end_time,day_of_wk,status)"
-					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			String query = " insert into users"
+					+ "(id,username,password,roll)"
+					+ " values (?, ?, ?, ?)";
 
 			
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
-			preparedStmt.setInt(1,key);
-			preparedStmt.setInt(2, Integer.parseInt(sch.getDoctorID()));
-			preparedStmt.setInt(3, Integer.parseInt(sch.getHospitalID()));
-			preparedStmt.setString(4, sch.getStTime());
-			preparedStmt.setString(5, sch.getEndTime());
-			preparedStmt.setString(6, sch.getDay_of_wk());
-			preparedStmt.setString(7, sch.getStatus());
+			preparedStmt.setInt(1, user.getId());
+			preparedStmt.setString(2, user.getUsername());
+			preparedStmt.setString(3, user.getPassword());
+			preparedStmt.setString(4, user.getRole());
 
 //execute the statement
 			preparedStmt.execute();
 			output = "{\"status\":\"success\"}";
-			response = Response.created(uri.getAbsolutePathBuilder().path(""+key).build())
+			response = Response.status(Status.CREATED)
 			.entity(output).build();
 			con.close();
 		} catch (Exception e) {
@@ -61,44 +58,42 @@ public class Schedule {
 		return response;
 	}
 
-	public List<ScheduleBean> readSchedule() {
+	public List<UserBean> readUsers() {
 		
-				return	readSchedule(0);
+				return	readUsers(0);
 	
 	}
 	
-	public ScheduleBean readScheduleById(int id) {
-		List<ScheduleBean> list =readSchedule(id);
+	public UserBean readUserById(int id) {
+		List<UserBean> list =readUsers(id);
 			if(!list.isEmpty()) {
 				return	list.get(0);
 			}
 			return null;
 	}
-	public List<ScheduleBean> readSchedule(int id ) {
-		List<ScheduleBean> schList = new ArrayList<>();
+	public List<UserBean> readUsers(int id ) {
+		List<UserBean> userList = new ArrayList<>();
 		try {
 			Connection con = DBConnection.connect();
 			if (con == null) {
 
 				System.out.println("Error While reading from database");
-				return schList;
+				return userList;
 			}
 			String query;
 			if ( id==0) {
-			 query = "select * from schedule";
+			 query = "select * from users";
 			}else {
-			 query = "select * from schedule where scheduleID="+id;
+			 query = "select * from users where id="+id;
 			}
 			
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
 			while (rs.next()) {
-				ScheduleBean sch = new ScheduleBean(rs.getInt("scheduleID"), Integer.toString(rs.getInt("doctorID")),
-						Integer.toString(rs.getInt("hospitalID")), rs.getString("st_time"), rs.getString("end_time"),
-						rs.getString("day_of_wk"), rs.getString("status"));
+				UserBean user = new UserBean(rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("roll"));
 
-				schList.add(sch);
+				userList.add(user);
 
 			}
 			con.close();
@@ -107,10 +102,10 @@ public class Schedule {
 			System.out.println("error wihile reading");
 			System.err.println(e.getMessage());
 		}
-		return schList;
+		return userList;
 	}
 
-	public Response updateSchedule(ScheduleBean sch ,UriInfo uri) {
+	public Response updateUser(UserBean user) {
 		String output = "";
 		
 		Response response;
@@ -122,23 +117,20 @@ public class Schedule {
 						.entity(output).build();
 			}
 // create a prepared statement
-			String query = "UPDATE schedule SET" + " doctorID=?," + "hospitalID=?," + "st_time=?," + "end_time=?,"
-					+ "day_of_wk=?, " + "status=?" + "WHERE scheduleID=?";
+			String query = "UPDATE users SET " + " username=? , " + " password=? ," + " roll=? " 
+					 + " WHERE id=?";
 
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 // binding values
-			preparedStmt.setInt(1, Integer.parseInt(sch.getDoctorID()));
-			preparedStmt.setInt(2, Integer.parseInt(sch.getHospitalID()));
-			preparedStmt.setString(3, sch.getStTime());
-			preparedStmt.setString(4, sch.getEndTime());
-			preparedStmt.setString(5, sch.getDay_of_wk());
-			preparedStmt.setString(6, sch.getStatus());
-			preparedStmt.setInt(7, sch.getId());
+			preparedStmt.setString(1, user.getUsername());
+			preparedStmt.setString(2, user.getPassword());
+			preparedStmt.setString(3, user.getRole());
+			preparedStmt.setInt(4, user.getId());
 // execute the statement
 			preparedStmt.execute();
 			con.close();
 			output = "{\"status\":\"success\"}";
-			response = Response.accepted(uri.getAbsolutePathBuilder().path(""+sch.getId()).build())
+			response = Response.status(Status.ACCEPTED)
 			.entity(output).build();
 		} catch (Exception e) {
 			output = "{\"status\":"+e.getMessage()+"}";
@@ -149,7 +141,7 @@ public class Schedule {
 		return response;
 	}
 
-	public Response deleteSchedule(int ID) {
+	public Response deleteUser(int ID) {
 		String output = "";
 		Response response;
 		try {
@@ -160,7 +152,7 @@ public class Schedule {
 						.entity(output).build();
 			}
 // create a prepared statement
-			String query = "delete from schedule where scheduleID=?";
+			String query = "delete from users where id=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 // binding values
 			preparedStmt.setInt(1, ID);
@@ -179,50 +171,6 @@ public class Schedule {
 		return response;
 	}
 
-	public List<ScheduleBean> getShedulesByDoc(int docId){
-		List<ScheduleBean> list = new ArrayList<>();
 	
-		for(ScheduleBean sch : readSchedule()){
-			if(Integer.parseInt(sch.getDoctorID())==docId) {
-				list.add(sch);
-			}		
-		}
-		
-		return list;
-	}
-	
-	public List<ScheduleBean> getShedulesByHos(int hosId){
-		List<ScheduleBean> list = new ArrayList<>();
-	
-		for(ScheduleBean sch : readSchedule()){
-			if(Integer.parseInt(sch.getHospitalID())==hosId) {
-				list.add(sch);
-			}		
-		}
-		
-		return list;
-	}
-	
-	public List<ScheduleBean> getShedulesByDay(String day){
-		List<ScheduleBean> list = new ArrayList<>();
-	
-		for(ScheduleBean sch : readSchedule()){
-			if(day.equals(sch.getDay_of_wk())) {
-				list.add(sch);
-			}		
-		}
-		
-		return list;
-	}
-	
-	public int kenGen(){
-		int id =0 ;
-		for(ScheduleBean sch : readSchedule()){
-			if(id<sch.getId()) {
-			 id =sch.getId();
-			}		
-		}
-		return id+1;
-	}
-	
+
 }

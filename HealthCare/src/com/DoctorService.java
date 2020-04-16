@@ -38,7 +38,6 @@ public class DoctorService {
 	
 	
 	
-	
 	//Insert a Doctor
 	@POST
 	@Path("/")
@@ -50,7 +49,6 @@ public class DoctorService {
 
 		JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
 
-	
 		
 		String dFname = doctorObject.get("d_fname").getAsString();
 		String dLname = doctorObject.get("d_lname").getAsString();
@@ -74,7 +72,6 @@ public class DoctorService {
 		String output =	objDoctor.insertDoctor(dFname,dLname,dNIC,dPhone,dEmail,dAdline1,dAdline2,dAdline3,dCity,dSpeciality,dWorkinghospital,dBank,dCardtype,dCardno,dCharge);
 		return output;
 	} 
-	
 	
 	
 	//Update a Doctor

@@ -8,8 +8,6 @@ import util.DBConnection;
 
 public class Doctor {
 		
-
-	
 	//Insert a Doctor
 //	public String insertDoctor(DoctorBean dct) {
 	public String insertDoctor(String dFname,String dLname,String dNIC,String dPhone,String dEmail,String dAdline1,String dAdline2,String dAdline3,String dCity,String dSpeciality,String dWorkinghospital,String dBank,String dCardtype,String dCardno,String dCharge) {

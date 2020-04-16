@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -63,24 +64,6 @@ public class AuthService {
 		}
 	
 	
-	/*@RolesAllowed({"admin"})
-	@POST
-	@Path("/check")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public boolean check(String data) {
-		
-		 JSONObject jsonObject = new JSONObject(data);
-		 String username = jsonObject.getString("username");
-		 String password = jsonObject.getString("password");
-		 Set<String> roleSet = (Set<String>) jsonObject.getJSONObject("roleSet");
-		
-		return	AuthUser.isUserAllowed(username, password, roleSet);
-		
-		
-	} 
-	*/
-	
 	@RolesAllowed({"admin"})
 	@POST
 	@Path("/")
@@ -138,6 +121,14 @@ public class AuthService {
 	@Path("/patient")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean checkPatient() {
+		return true;			
+	}
+	
+	@DenyAll
+	@GET
+	@Path("/deny")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deny() {
 	 
 		return true;
 				

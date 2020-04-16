@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
 @XmlRootElement
 public class DoctorBean {
 

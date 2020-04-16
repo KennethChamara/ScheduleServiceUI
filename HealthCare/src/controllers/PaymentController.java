@@ -1,6 +1,5 @@
 package controllers;
 
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,13 +9,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import beans.Payment;
-import beans.PaymentAppointmentBean;
 import beans.CardPayment;
 import beans.CommonResponse;
 import beans.OnlinePayment;
 import beans.PaypalPayment;
-import model.PaymentAppointment;
 import services.PaymentService;
 import util.DBConnection;
 
@@ -27,20 +25,6 @@ public class PaymentController {
 	public PaymentController() throws ClassNotFoundException, SQLException {
 		this.paymentService = new PaymentService(DBConnection.connect());
 	}
-	
-	
-	@POST
-	@Path("insertPaymentFromAppointment")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String insertPayAppointment(String appointPaydetails) {
-		//payappbean get the appointPaydetails and get the values into the payment table related variables in it		
-		PaymentAppointmentBean  payAppbean =  new PaymentAppointmentBean(appointPaydetails);
-		payAppbean.ConvertStringToJSON();
-		//this class insert the details to the database
-		PaymentAppointment payapp =  new PaymentAppointment();		
-		return payapp.InsertPayment(payAppbean);			
-	}	
 
 	@GET
 	@Path("view")
@@ -100,8 +84,4 @@ public class PaymentController {
 			return CommonResponse.Error(e);
 		}
 	}
-	
-	
-	
-	
 }

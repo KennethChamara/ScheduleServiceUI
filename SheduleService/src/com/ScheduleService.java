@@ -59,7 +59,7 @@ public class ScheduleService {
 		return Response.noContent().build();
 	}
 
-	@RolesAllowed({ "docters", "admin" })
+	@RolesAllowed({ "docters", "admin","patient" })
 	@GET
 	@Path("/{scheduleID}")
 	@Produces(MediaType.APPLICATION_JSON)

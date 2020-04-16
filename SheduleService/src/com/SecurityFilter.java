@@ -83,16 +83,14 @@ public class SecurityFilter implements ContainerRequestFilter {
 					Client client = ClientBuilder.newClient(clientConfig);
 					WebTarget webTarget;
 
-					if (rolesSet.contains("doctor")) {
-						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/doctor");
+					if (rolesSet.contains("admin")) {
+						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/admin");
 
-					} else if(rolesSet.contains("patient")) {
+					} else if (rolesSet.contains("doctor")) {
+						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/doctor");
+					} else {
 						webTarget = client.target("http://localhost:8081/AuthService/AuthService")
 								.path("users/patient");
-					} else if (rolesSet.contains("admin")) {
-						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/admin");
-					} else {
-						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/deny");
 					}
 
 					Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);

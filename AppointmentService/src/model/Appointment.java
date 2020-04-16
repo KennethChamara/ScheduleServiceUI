@@ -106,7 +106,7 @@ public class Appointment {
 		
 		try {
 			
-			 con = DBConnection.connect();
+			con = DBConnection.connect();
 			 
 			if (con == null) {
 				return "Error while connecting to the database for inserting.";
@@ -134,10 +134,10 @@ public class Appointment {
 			
 			//get the AppointmentID of the current inserted row & assign it to LastAppointmentID variable
 			GetAppointmentIdOfRecentInsert(con);
-			GetInsertSeviveFromPayment(appointment);
 			//insert into related Payment Tables 
-			//GetInsertSeviveFromPayment(appointment.getPaymentType());
-			 con.close();
+			GetInsertServiceFromPayment(appointment);
+			
+			con.close();
 			output = "Inserted successfully to Appointment";
 		    
 			
@@ -165,20 +165,20 @@ public class Appointment {
 	}
 	
 	//this method call payment API and insert appointment details to  payment table
-	public String  GetInsertSeviveFromPayment(AppointmentBean appointment)
+	public String  GetInsertServiceFromPayment(AppointmentBean appointment)
 	{
 		try {
-		MediaType JSONType = MediaType.get("application/json; charset=utf-8");
-		OkHttpClient client = new OkHttpClient();			
-		RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+LastAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"','Amount':'"+appointment.getAmount()+"'}",JSONType);
-		Request request = new Request.Builder()
-			        .url("http://localhost:8081/HealthCare/api/payment/insertPaymentFromAppointment")
-			        .post(body)
-			        .build();
-		
-		 try (Response response = client.newCall(request).execute()) {
-			 return response.body().string();
-		 }
+			MediaType JSONType = MediaType.get("application/json; charset=utf-8");
+			OkHttpClient client = new OkHttpClient();			
+			RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+LastAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"','Amount':'"+appointment.getAmount()+"'}",JSONType);
+			Request request = new Request.Builder()
+				        .url("http://localhost:8081/HealthCare/api/payment/insertPaymentFromAppointment")
+				        .post(body)
+				        .build();
+			
+			 try (Response response = client.newCall(request).execute()) {
+				 return response.body().string();
+			 }
 		}catch (Exception e) {
 			System.out.println("Error in GetInsertSeviveFromPayment " + e);
 		}
@@ -235,8 +235,8 @@ public class Appointment {
 			
 			con.close();
 			
-			output = "Updated successfully";
-			
+			output = "Updated successfully ";
+			GetUpdatetServiceFromPayment(appointment);
 		} catch (Exception e) {
 			output = "Error while Updating the Appointment.";
 			System.err.println(e.getMessage());
@@ -244,33 +244,79 @@ public class Appointment {
 		
 		return output;
 
-	  } 
-	 
+	} 
+	
+	//this method call payment API and update appointment details to  payment table
+	public String  GetUpdatetServiceFromPayment(AppointmentBean appointment)
+	{
+		
+		try {
+			MediaType JSONType = MediaType.get("application/json; charset=utf-8");
+			OkHttpClient client = new OkHttpClient();		
+			RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+appointment.getAppointmentID()+"','PaymentType':'"+appointment.getPaymentType()+"','Amount':'"+appointment.getAmount()+"'}",JSONType);
+			Request request = new Request.Builder()
+				        .url("http://localhost:8081/HealthCare/api/payment/updatePaymentFromAppointment")
+				        .put(body)
+				        .build();
+			
+			 try (Response response = client.newCall(request).execute()) {
+				 return response.body().string();
+			 }
+		}catch (Exception e) {
+			System.out.println("Error in GetUpdateSeviveFromPayment " + e);
+		}
+		return "Update Successfull to payment";
+	}
 
 
-	  public String deleteAppointement(AppointmentBean appointment) {
-		   output = "";
-			try {
-				con = DBConnection.connect();
-				if (con == null) {
-					return "Error while connecting to the database for Deleting.";
-				}
-				// create a prepared statement
-				query = " DELETE FROM appointment where AppointmentID = ?";
-				preparedStmt = con.prepareStatement(query);
-				// binding values					
-				preparedStmt.setInt(1, appointment.getAppointmentID());	
-				// execute the statement
-				preparedStmt.executeUpdate();
-				con.close();
-				output = "Deleting successfully";
-			} catch (Exception e) {
-				output = "Error while Deleting the Appointment.";
-				System.err.println(e.getMessage());
+    public String deleteAppointement(AppointmentBean appointment) {
+	   output = "";
+		try {
+			
+			//first call delete method from paymnet and delete the payment method
+			GetDeleteServiceFromPayment(appointment);
+			
+			con = DBConnection.connect();
+			if (con == null) {
+				return "Error while connecting to the database for Deleting.";
 			}
-			return output;
-	  }
-	 
+			// create a prepared statement
+			query = " DELETE FROM appointment where AppointmentID = ?";
+			preparedStmt = con.prepareStatement(query);
+			// binding values					
+			preparedStmt.setInt(1, appointment.getAppointmentID());	
+			// execute the statement
+			preparedStmt.executeUpdate();
+			con.close();
+			output = "Deleting successfully";
+		} catch (Exception e) {
+			output = "Error while Deleting the Appointment.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+    }
+	
+    //this method call payment API and delete appointment details to  payment table
+  	public String  GetDeleteServiceFromPayment(AppointmentBean appointment)
+  	{
+  		
+  		try {
+	  		MediaType JSONType = MediaType.get("application/json; charset=utf-8");
+	  		OkHttpClient client = new OkHttpClient();		
+	  		RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+appointment.getAppointmentID()+"'}",JSONType);
+	  		Request request = new Request.Builder()
+	  			        .url("http://localhost:8081/HealthCare/api/payment/deletePaymentFromAppointment")
+	  			        .delete(body)
+	  			        .build();
+	  		
+	  		 try (Response response = client.newCall(request).execute()) {
+	  			 return response.body().string();
+	  		 }
+  		}catch (Exception e) {
+  			System.out.println("Error in GetDeleteSeviveFromPayment " + e);
+  		}
+  		return "Delete Successfull to Payment";
+  	}
 	 
 
 }

@@ -106,7 +106,7 @@ public class AppointmentBean {
 	}
 	public void setPaymentType(String paymentType) {
 		PaymentType = paymentType;
-	}	
+	} 
 	public double getAmount() {
 		return Amount;
 	}
@@ -130,7 +130,6 @@ public class AppointmentBean {
 		setPaymentType(AppointmentObject.get("PaymentType").getAsString());
 		setAmount(AppointmentObject.get("Amount").getAsDouble());
 	}
-	
 	public void convertStringToJSONUpdate(String appointmentData) {
 		//convert string to JSON object and assign to variables in the class
 		AppointmentObject  = new JsonParser().parse(appointmentData).getAsJsonObject(); 		
@@ -147,6 +146,8 @@ public class AppointmentBean {
 		setHospitalID(AppointmentObject.get("HospitalID").getAsInt());
 		setBookedDate(AppointmentObject.get("BookedDate").getAsString());
 		setAddedDate(AppointmentObject.get("AddedDate").getAsString());
+		setAmount(AppointmentObject.get("Amount").getAsDouble());
+		setPaymentType(AppointmentObject.get("PaymentType").getAsString());
 		
 	}
 	

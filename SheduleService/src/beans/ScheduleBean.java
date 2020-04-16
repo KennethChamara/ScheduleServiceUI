@@ -1,28 +1,29 @@
 package beans;
 
-import javax.xml.bind.annotation.XmlRootElement; 
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @XmlRootElement
 public class ScheduleBean {
-	 int id;
+	int id;
 	private String doctorID;
 	private String hospitalID;
 	private String stTime;
 	private String endTime;
 	private String day_of_wk;
 	private String status;
-	
-	public ScheduleBean() {}
+
+	public ScheduleBean() {
+	}
 
 	public ScheduleBean(String sh) {
-		
+
 		JsonObject scheduleObject = new JsonParser().parse(sh).getAsJsonObject();
-		
-		if (scheduleObject.get("scheduleID") !=null) {
-		this.id = scheduleObject.get("scheduleID").getAsInt();
+
+		if (scheduleObject.get("scheduleID") != null) {
+			this.id = scheduleObject.get("scheduleID").getAsInt();
 		}
 		this.doctorID = scheduleObject.get("doctorID").getAsString();
 		this.hospitalID = scheduleObject.get("hospitalID").getAsString();

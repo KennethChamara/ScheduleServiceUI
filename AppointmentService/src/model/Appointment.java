@@ -170,7 +170,7 @@ public class Appointment {
 		try {
 		MediaType JSONType = MediaType.get("application/json; charset=utf-8");
 		OkHttpClient client = new OkHttpClient();			
-		RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+LastAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"'}",JSONType);
+		RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+LastAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"','Amount':'"+appointment.getAmount()+"'}",JSONType);
 		Request request = new Request.Builder()
 			        .url("http://localhost:8081/HealthCare/api/payment/insertPaymentFromAppointment")
 			        .post(body)

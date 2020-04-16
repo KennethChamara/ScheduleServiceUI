@@ -19,6 +19,7 @@ public class AppointmentBean {
 	private String AddedDate;
 	private String PaymentType;
 	private JsonObject AppointmentObject;
+	private double Amount;
 	
 	public String getBookedDate() {
 		return BookedDate;
@@ -105,8 +106,13 @@ public class AppointmentBean {
 	}
 	public void setPaymentType(String paymentType) {
 		PaymentType = paymentType;
-	} 
-
+	}	
+	public double getAmount() {
+		return Amount;
+	}
+	public void setAmount(double amount) {
+		Amount = amount;
+	}
 	public void convertStringToJSONInsert(String appointmentData) {
 		//convert string to JSON object and assign to variables in the class
 		AppointmentObject  = new JsonParser().parse(appointmentData).getAsJsonObject(); 		
@@ -122,6 +128,7 @@ public class AppointmentBean {
 		setHospitalID(AppointmentObject.get("HospitalID").getAsInt());
 		setBookedDate(AppointmentObject.get("BookedDate").getAsString());
 		setPaymentType(AppointmentObject.get("PaymentType").getAsString());
+		setAmount(AppointmentObject.get("Amount").getAsDouble());
 	}
 	
 	public void convertStringToJSONUpdate(String appointmentData) {

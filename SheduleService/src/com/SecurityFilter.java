@@ -1,6 +1,6 @@
 package com;
 
-import java.lang.reflect.Method;  
+import java.lang.reflect.Method;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,9 +32,6 @@ import org.json.JSONObject;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 
-
-
-
 @Provider
 public class SecurityFilter implements ContainerRequestFilter {
 	public static final String AUTHENTICATION_HEADER_KEY = "Authorization";
@@ -48,85 +45,73 @@ public class SecurityFilter implements ContainerRequestFilter {
 		// TODO Auto-generated method stub
 		List<String> authHeader = requestContext.getHeaders().get(AUTHENTICATION_HEADER_KEY);
 		Method method = resourceInfo.getResourceMethod();
-		
-		 if( ! method.isAnnotationPresent(PermitAll.class))
-	        {
-			//Access denied for all
-	            if(method.isAnnotationPresent(DenyAll.class))
-	            {
-	            	Response unauthoriazedStatus = Response
-							.status(Response.Status.UNAUTHORIZED)
-							.entity("{\"error\" : \"not allowed 2\"}")
-							.build();
-	            		requestContext.abortWith(unauthoriazedStatus);
-	            }
-		if(authHeader != null && authHeader.size() > 0 ) {
-			String authToken = authHeader.get(0);
-			authToken = authToken.replaceFirst(AUTHENTICATION_HEADER_PREFIX, "");
-			
-			String decodedString = "";
-			try {
-				byte[] decodedBytes = Base64.getDecoder().decode(
-						authToken);
-			  decodedString = new String(decodedBytes, "UTF-8");
-			} catch (IOException e) {
-				e.printStackTrace();
+
+		if (!method.isAnnotationPresent(PermitAll.class)) {
+			// Access denied for all
+			if (method.isAnnotationPresent(DenyAll.class)) {
+				Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
+						.entity("{\"error\" : \"not allowed 2\"}").build();
+				requestContext.abortWith(unauthoriazedStatus);
 			}
-			final StringTokenizer tokenizer = new StringTokenizer(
-					decodedString, ":");
-			
-			final String username = tokenizer.nextToken();
-			final String password = tokenizer.nextToken();
-			 if(method.isAnnotationPresent(RolesAllowed.class))
-	            {
-	                RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-	                Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-	                  
-	                //Is user valid?
-	                
-	                ClientConfig clientConfig = new ClientConfig();
-	                HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username,password);
-	                clientConfig.register( feature) ;
-	             
-	                clientConfig.register(JacksonFeature.class);
-	             
-	                Client client = ClientBuilder.newClient( clientConfig );
-	                WebTarget webTarget;
-	                
-	                if(rolesSet.contains("admin")) {
-	                 webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/admin");
-	                 
-	                } else if (rolesSet.contains("doctor")) {
-               		webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/doctor");
-	                } else{
-                		webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/patient");
-	                }
-	                
-	                
-	                Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-	                
-	                Response response = invocationBuilder.get();
-	                  
-	                if(response.getStatus()!=200)
-	                {
-	                	Response unauthoriazedStatus = Response
-								.status(Response.Status.UNAUTHORIZED)
-								.entity("{\"error\" : \"not authorized 3\"}")
-								.build();
-	                	requestContext.abortWith(unauthoriazedStatus);
-	                   
-	                }
-	                return;
-	            }
-										
+			if (authHeader != null && authHeader.size() > 0) {
+				String authToken = authHeader.get(0);
+				authToken = authToken.replaceFirst(AUTHENTICATION_HEADER_PREFIX, "");
+
+				String decodedString = "";
+				try {
+					byte[] decodedBytes = Base64.getDecoder().decode(authToken);
+					decodedString = new String(decodedBytes, "UTF-8");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				final StringTokenizer tokenizer = new StringTokenizer(decodedString, ":");
+
+				final String username = tokenizer.nextToken();
+				final String password = tokenizer.nextToken();
+				if (method.isAnnotationPresent(RolesAllowed.class)) {
+					RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
+					Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
+
+					// Is user valid?
+
+					ClientConfig clientConfig = new ClientConfig();
+					HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
+					clientConfig.register(feature);
+
+					clientConfig.register(JacksonFeature.class);
+
+					Client client = ClientBuilder.newClient(clientConfig);
+					WebTarget webTarget;
+
+					if (rolesSet.contains("admin")) {
+						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/admin");
+
+					} else if (rolesSet.contains("doctor")) {
+						webTarget = client.target("http://localhost:8081/AuthService/AuthService").path("users/doctor");
+					} else {
+						webTarget = client.target("http://localhost:8081/AuthService/AuthService")
+								.path("users/patient");
+					}
+
+					Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+
+					Response response = invocationBuilder.get();
+
+					if (response.getStatus() != 200) {
+						Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
+								.entity("{\"error\" : \"not authorized 3\"}").build();
+						requestContext.abortWith(unauthoriazedStatus);
+
+					}
+					return;
+				}
+
+			}
 		}
-	        }
-		Response unauthoriazedStatus = Response
-											.status(Response.Status.UNAUTHORIZED)
-											.entity("{\"error\" : \"not authorized 1\"}")
-											.build(); 
+		Response unauthoriazedStatus = Response.status(Response.Status.UNAUTHORIZED)
+				.entity("{\"error\" : \"not authorized 1\"}").build();
 		requestContext.abortWith(unauthoriazedStatus);
-	        
+
 	}
 
 }

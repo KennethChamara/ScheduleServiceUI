@@ -56,6 +56,7 @@ public String insertDoctor(DoctorBean doctor) {
 		preparedStmt.setString(14, doctor.getCardtype());
 		preparedStmt.setString(15, doctor.getCardno());
 		preparedStmt.setString(16, doctor.getCharge());
+//		preparedStmt.setLong(17, keyGen());	
 
 			
 // execute the statement

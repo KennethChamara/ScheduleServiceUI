@@ -172,7 +172,7 @@ public class Appointment {
 			OkHttpClient client = new OkHttpClient();			
 			RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+LastAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"','Amount':'"+appointment.getAmount()+"'}",JSONType);
 			Request request = new Request.Builder()
-				        .url("http://localhost:8081/HealthCare/api/payment/insertPaymentFromAppointment")
+				        .url("http://localhost:8080/PaymentService/api/payment/insertPaymentFromAppointment")
 				        .post(body)
 				        .build();
 			
@@ -255,7 +255,7 @@ public class Appointment {
 			OkHttpClient client = new OkHttpClient();		
 			RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+appointment.getAppointmentID()+"','PaymentType':'"+appointment.getPaymentType()+"','Amount':'"+appointment.getAmount()+"'}",JSONType);
 			Request request = new Request.Builder()
-				        .url("http://localhost:8081/HealthCare/api/payment/updatePaymentFromAppointment")
+				        .url("http://localhost:8080/PaymentService/api/payment/updatePaymentFromAppointment")
 				        .put(body)
 				        .build();
 			
@@ -305,7 +305,7 @@ public class Appointment {
 	  		OkHttpClient client = new OkHttpClient();		
 	  		RequestBody body = RequestBody.create( "{ 'AppointmentID':'"+appointment.getAppointmentID()+"'}",JSONType);
 	  		Request request = new Request.Builder()
-	  			        .url("http://localhost:8081/HealthCare/api/payment/deletePaymentFromAppointment")
+	  			        .url("http://localhost:8080/PaymentService/api/payment/deletePaymentFromAppointment")
 	  			        .delete(body)
 	  			        .build();
 	  		

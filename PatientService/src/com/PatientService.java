@@ -26,8 +26,8 @@ import model.Patient;
 public class PatientService {
 
 	Patient PatientObj = new Patient();
-	
-	//View list of patients
+
+	// View list of patients
 	@RolesAllowed("admin")
 	@GET
 	@Path("/")
@@ -36,7 +36,7 @@ public class PatientService {
 		return PatientObj.readPatient();
 	}
 
-	//View a patient identified by id
+	// View a patient identified by id
 	@RolesAllowed({ "admin", "patient" })
 	@GET
 	@Path("/{PatientID}")
@@ -45,9 +45,8 @@ public class PatientService {
 	public PatientBean readPatientById(@PathParam("PatientID") int id) {
 		return PatientObj.readPatientById(id);
 	}
-	
-	
-	//Insert a patient
+
+	// Insert a patient
 	@RolesAllowed({ "admin", "patient" })
 	@POST
 	@Path("/")
@@ -62,7 +61,7 @@ public class PatientService {
 
 	}
 
-	//Update a patient
+	// Update a patient
 	@RolesAllowed({ "admin", "patient" })
 	@PUT
 	@Path("/")
@@ -74,7 +73,8 @@ public class PatientService {
 		return output;
 	}
 
-	//Remove a patient
+	// Remove a patient
+
 	@RolesAllowed({ "admin", "patient" })
 	@DELETE
 	@Path("/")

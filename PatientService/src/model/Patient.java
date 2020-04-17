@@ -1,18 +1,28 @@
 package model;
 
 import java.sql.*;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+
+import com.google.gson.JsonObject;
 
 import beans.PatientBean;
 import util.DBConnection;
 
 public class Patient {
-	
-	//Insert a patient
+
+	// Insert a patient
 	public String insertPatient(PatientBean patient) {
 		String output = "";
 		try {
@@ -50,6 +60,18 @@ public class Patient {
 			// execute the statement
 			preparedStmt.execute();
 
+			JsonObject msg = new JsonObject();
+			msg.addProperty("id", keyGen());
+			msg.addProperty("username", patient.getPatientUsername());
+			msg.addProperty("password", patient.getPatientPassword());
+			msg.addProperty("role", "patient");
+
+			HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("admin", "admin");
+			Client client = ClientBuilder.newBuilder().register(feature).build();
+			WebTarget webTarget = client.target("http://localhost:8080/AuthService/AuthService").path("users");
+			Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.post(Entity.entity(msg.toString(), MediaType.APPLICATION_JSON));
+
 			con.close();
 			output = "Inserted successfully";
 
@@ -60,14 +82,14 @@ public class Patient {
 		return output;
 	}
 
-	//View list of patients
+	// View list of patients
 	public List<PatientBean> readPatient() {
 
 		return readPatient(0);
 
 	}
 
-	//View a patient identified by id
+	// View a patient identified by id
 	public PatientBean readPatientById(int id) {
 		List<PatientBean> list = readPatient(id);
 		if (!list.isEmpty()) {
@@ -76,8 +98,7 @@ public class Patient {
 		return null;
 	}
 
-	
-	//View method
+	// View method
 	public List<PatientBean> readPatient(int id) {
 		List<PatientBean> patientList = new ArrayList<>();
 		try {
@@ -118,7 +139,7 @@ public class Patient {
 		return patientList;
 	}
 
-	//Update a patient
+	// Update a patient
 	public String updatePatient(PatientBean patient) {
 		String output = "";
 		try {
@@ -128,7 +149,9 @@ public class Patient {
 			}
 			// create a prepared statement
 			String query = "UPDATE patient SET PatientNIC=?,PatientFName=?,PatientLName=?,PatientGender=?,PatientPhone=?,PatientBloodGroup=?,PatientMaritalStatus=?,Patient_Add_Line1=?,Patient_Add_Line2=?,Patient_Add_Line3=?,Patient_Add_City=?,PatientDOB_year=?,PatientDOB_month=?,PatientDOB_day=?,PatientEmail=?,PatientUsername=?,PatientPassword=? WHERE PatientID=?";
+
 			PreparedStatement preparedStmt = con.prepareStatement(query);
+
 			// binding values
 			preparedStmt.setString(1, patient.getPatientNIC());
 			preparedStmt.setString(2, patient.getPatientFName());
@@ -148,8 +171,9 @@ public class Patient {
 			preparedStmt.setString(16, patient.getPatientUsername());
 			preparedStmt.setString(17, patient.getPatientPassword());
 			preparedStmt.setInt(18, patient.getId());
-			// execute the statement
+
 			preparedStmt.execute();
+
 			con.close();
 			output = "Updated successfully";
 		} catch (Exception e) {
@@ -159,7 +183,7 @@ public class Patient {
 		return output;
 	}
 
-	//Remove a patient
+	// Remove a patient
 	public String deletePatient(String PatientID) {
 		String output = "";
 		try {
@@ -182,6 +206,14 @@ public class Patient {
 			System.err.println(e.getMessage());
 		}
 		return output;
+	}
+
+	public int keyGen() {
+		List<PatientBean> list;
+		list = readPatient();
+		int num = list.size() + 1000;
+		return num;
+
 	}
 
 }

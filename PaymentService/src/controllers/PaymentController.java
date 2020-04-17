@@ -4,6 +4,7 @@ package controllers;
 import java.sql.SQLException; 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,7 +31,7 @@ public class PaymentController {
 		this.paymentService = new PaymentService(DBConnection.connect());
 	}
 		
-	
+	@RolesAllowed("admin")
 	@GET
 	@Path("view")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -38,6 +39,7 @@ public class PaymentController {
 		return this.paymentService.getAllPayments();
 	}
 	
+	@RolesAllowed("admin")
 	@POST
 	@Path("refund")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -51,6 +53,7 @@ public class PaymentController {
 		}
 	}
 
+	@RolesAllowed("admin")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -64,6 +67,7 @@ public class PaymentController {
 		}
 	}
 
+	@RolesAllowed("admin")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -77,6 +81,7 @@ public class PaymentController {
 		}
 	}
 
+	@RolesAllowed("admin")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -90,7 +95,7 @@ public class PaymentController {
 		}
 	}
 
-	
+	@RolesAllowed("admin")
 	@POST
 	@Path("insertPaymentFromAppointment")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -103,6 +108,7 @@ public class PaymentController {
 		PaymentAppointment payapp =  new PaymentAppointment();		
 		return payapp.InsertPayment(payAppbean);			
 	}
+	@RolesAllowed("admin")
 	@PUT
 	@Path("updatePaymentFromAppointment")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -116,6 +122,7 @@ public class PaymentController {
 		return payapp.UpdatePayment(payAppbean);			
 	}
 	
+	@RolesAllowed("admin")
 	@DELETE
 	@Path("deletePaymentFromAppointment")
 	@Consumes(MediaType.APPLICATION_JSON)

@@ -6,8 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @XmlRootElement
-public class HospitalBean 
-{
+public class HospitalBean {
 	int id;
 	private String hospitalName;
 	private String hospitalPhone;
@@ -21,15 +20,15 @@ public class HospitalBean
 	private String hospitalAccNo;
 	private String hospitalBank;
 	private String hospitalCharge;
-	
-	public HospitalBean() {}
-	
+
+	public HospitalBean() {
+	}
+
 	public HospitalBean(String hos) {
-		
+
 		JsonObject hospitalObject = new JsonParser().parse(hos).getAsJsonObject();
-		
-		if (hospitalObject.get("h_ID") !=null) 
-		{
+
+		if (hospitalObject.get("h_ID") != null) {
 			this.id = hospitalObject.get("h_ID").getAsInt();
 		}
 		this.hospitalName = hospitalObject.get("h_name").getAsString();
@@ -46,9 +45,11 @@ public class HospitalBean
 		this.hospitalCharge = hospitalObject.get("h_charge").getAsString();
 
 	}
-	
-	public HospitalBean(int id, String hospitalName, String hospitalPhone, String hospitalAddrLine1, String hospitalAddrLine2, String hospitalAddrLine3, String hospitalCity, String hospitalEmail , String hospitalDesc, String hospitalServices, String hospitalAccNo, String hospitalBank, String hospitalCharge)
-	{
+
+	public HospitalBean(int id, String hospitalName, String hospitalPhone, String hospitalAddrLine1,
+			String hospitalAddrLine2, String hospitalAddrLine3, String hospitalCity, String hospitalEmail,
+			String hospitalDesc, String hospitalServices, String hospitalAccNo, String hospitalBank,
+			String hospitalCharge) {
 		this.id = id;
 		this.hospitalName = hospitalName;
 		this.hospitalPhone = hospitalPhone;
@@ -63,9 +64,10 @@ public class HospitalBean
 		this.hospitalBank = hospitalBank;
 		this.hospitalCharge = hospitalCharge;
 	}
-	
-	public HospitalBean(String hospitalName, String hospitalPhone, String hospitalAddrLine1, String hospitalAddrLine2, String hospitalAddrLine3, String hospitalCity, String hospitalEmail , String hospitalDesc, String hospitalServices, String hospitalAccNo, String hospitalBank, String hospitalCharge)
-	{
+
+	public HospitalBean(String hospitalName, String hospitalPhone, String hospitalAddrLine1, String hospitalAddrLine2,
+			String hospitalAddrLine3, String hospitalCity, String hospitalEmail, String hospitalDesc,
+			String hospitalServices, String hospitalAccNo, String hospitalBank, String hospitalCharge) {
 		this.hospitalName = hospitalName;
 		this.hospitalPhone = hospitalPhone;
 		this.hospitalAddrLine1 = hospitalAddrLine1;
@@ -183,6 +185,5 @@ public class HospitalBean
 	public void setHospitalCharge(String hospitalCharge) {
 		this.hospitalCharge = hospitalCharge;
 	}
-	
-	
+
 }

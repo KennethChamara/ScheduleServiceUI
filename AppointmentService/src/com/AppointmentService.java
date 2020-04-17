@@ -1,5 +1,6 @@
 package com;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +18,7 @@ public class AppointmentService {
 	Appointment appointmentObj = new Appointment();
 	AppointmentBean appbean ;
 	
+	@RolesAllowed({ "admin","patient" })
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
@@ -26,7 +28,7 @@ public class AppointmentService {
 		return output;
 	}
 	
-
+	@RolesAllowed({ "admin","patient" })
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -41,6 +43,7 @@ public class AppointmentService {
 		return output;
 	}
 	
+	@RolesAllowed({ "admin","patient" })
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -56,6 +59,7 @@ public class AppointmentService {
 		
 	}
 
+	@RolesAllowed({ "admin","patient" })
 	@DELETE
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)

@@ -12,6 +12,7 @@ import util.DBConnection;
 
 public class Hospital 
 {
+	//insert hospital
 	public String insertHospital(HospitalBean hos) 
 	{
 		String output = "";
@@ -60,8 +61,26 @@ public class Hospital
 		return output;
 	}
 	
-	
+	//read list of hospitals	
 	public List<HospitalBean> readHospital() 
+	{
+			return	readHospital(0);
+
+	}
+		
+	//read the hospital by ID
+	public HospitalBean readHospitalById(int id) 
+	{
+		List<HospitalBean> list =readHospital(id);
+			if(!list.isEmpty()) 
+			{
+				return	list.get(0);
+			}
+			return null;
+	}
+	
+	//read hospital
+	public List<HospitalBean> readHospital(int id) 
 	{
 		List <HospitalBean> hospitalList = new ArrayList<>();
 	
@@ -113,7 +132,7 @@ public class Hospital
 		return hospitalList;
 	}
 	
-	
+	//update hospital
 	public String updateHospital(HospitalBean hos) 
 	{
 		String output = "";
@@ -160,7 +179,7 @@ public class Hospital
 		return output;
 	}
 	
-	
+	//delete hospital
 	public String deleteHospital(String h_ID) 
 	{
 		String output = "";

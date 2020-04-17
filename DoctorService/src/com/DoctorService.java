@@ -57,6 +57,7 @@ public class DoctorService {
 		return output;
 
 	}
+	
 
 	// Update a Doctor
 	@RolesAllowed({ "doctor", "admin"})

@@ -22,9 +22,11 @@ import model.Hospital;
 @Path("/hospitals")
 
 public class HospitalService {
+	
 	Hospital hospitalObj = new Hospital();
-
-	@RolesAllowed("admin")
+	
+	//read list of hospitals
+	@RolesAllowed({ "admin", "doctor","patient" })
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +34,9 @@ public class HospitalService {
 		return hospitalObj.readHospital();
 
 	}
-
+	
+	//insert hospital
+	@RolesAllowed("admin")
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -44,7 +48,9 @@ public class HospitalService {
 		return output;
 
 	}
-
+	
+	//update hospital
+	@RolesAllowed("admin")
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -56,7 +62,10 @@ public class HospitalService {
 		return output;
 
 	}
-
+	
+	
+	//delete hospital
+	@RolesAllowed("admin")
 	@DELETE
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)

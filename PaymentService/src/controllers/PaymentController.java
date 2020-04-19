@@ -30,29 +30,8 @@ public class PaymentController {
 	public PaymentController() throws ClassNotFoundException, SQLException {
 		this.paymentService = new PaymentService(DBConnection.connect());
 	}
-		
-	@RolesAllowed("admin")
-	@GET
-	@Path("view")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Payment> view() throws SQLException {
-		return this.paymentService.getAllPayments();
-	}
-	
-	@RolesAllowed("admin")
-	@POST
-	@Path("refund")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public CommonResponse makeRefund(Payment payment) {
-		try {
-			this.paymentService.makeRefund(payment);
-			return CommonResponse.OK("Success");
-		} catch (Exception e) {
-			return CommonResponse.Error(e);
-		}
-	}
 
+	//Insert online payments details
 	@RolesAllowed("admin")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -67,6 +46,7 @@ public class PaymentController {
 		}
 	}
 
+	//Insert card payments details
 	@RolesAllowed("admin")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -81,6 +61,7 @@ public class PaymentController {
 		}
 	}
 
+	//Insert paypal payments details
 	@RolesAllowed("admin")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -94,7 +75,50 @@ public class PaymentController {
 			return CommonResponse.Error(e);
 		}
 	}
+	
+	//View payments details
+	@RolesAllowed("admin")
+	@GET
+	@Path("view")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Payment> view() throws SQLException {
+		return this.paymentService.getAllPayments();
+	}
+	
+	//Update payment details.
+	//Make a refund details
+	@RolesAllowed("admin")
+	@PUT
+	@Path("refund")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public CommonResponse makeRefund(Payment payment) {
+		try {
+			this.paymentService.makeRefund(payment);
+			return CommonResponse.OK("Success");
+		} catch (Exception e) {
+			return CommonResponse.Error(e);
+		}
+	}
+	
+	//Delete refund details
+	@RolesAllowed("admin")
+	@POST
+	@Path("un-refund")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public CommonResponse unRefund(Payment payment) {
+		try {
+			this.paymentService.unRefund(payment);
+			return CommonResponse.OK("Success");
+		} catch (Exception e) {
+			return CommonResponse.Error(e);
+		}
+	}
 
+
+
+	//Insert payment details from appointment
 	@RolesAllowed("admin")
 	@POST
 	@Path("insertPaymentFromAppointment")
@@ -108,6 +132,8 @@ public class PaymentController {
 		PaymentAppointment payapp =  new PaymentAppointment();		
 		return payapp.InsertPayment(payAppbean);			
 	}
+	
+	//Update payment details from appointment
 	@RolesAllowed("admin")
 	@PUT
 	@Path("updatePaymentFromAppointment")
@@ -122,6 +148,7 @@ public class PaymentController {
 		return payapp.UpdatePayment(payAppbean);			
 	}
 	
+	//Delete payment details from appointment
 	@RolesAllowed("admin")
 	@DELETE
 	@Path("deletePaymentFromAppointment")
@@ -135,7 +162,6 @@ public class PaymentController {
 		PaymentAppointment payapp =  new PaymentAppointment();		
 		return payapp.DeletePayment(payAppbean);			
 	}
-	
 	
 
 	

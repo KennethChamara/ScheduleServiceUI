@@ -1,11 +1,4 @@
-package services;
-
-import beans.Payment;
-import beans.CardPayment;
-import beans.OnlinePayment;
-import beans.PaypalPayment;
-import enums.PaymentMethod;
-import util.DBConnection;
+package model;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -15,8 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentService {
+import beans.CardPayment;
+import beans.OnlinePayment;
+import beans.Payment;
+import beans.PaypalPayment;
+import enums.PaymentMethod;
 
+public class PaymentService {
 	private Connection sqlConnection;
 
 	public PaymentService(Connection sqlConnection) {
@@ -146,8 +144,4 @@ public class PaymentService {
 		
 		return payments;
 	}
-
-
-	
-
 }

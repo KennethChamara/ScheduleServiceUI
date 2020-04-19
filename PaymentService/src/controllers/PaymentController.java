@@ -163,7 +163,6 @@ public class PaymentController {
 		return payapp.DeletePayment(payAppbean);			
 	}
 	
-	
 
 	
 }

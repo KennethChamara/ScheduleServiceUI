@@ -32,7 +32,7 @@ public class PaymentAppointment {
 			
 			con.close();
 			
-			output = "Inserted successfully";
+			output = "Payment inserted successfully";
 			
 		} catch (Exception e) {
 			output = "Error while inserting the paydetails.";
@@ -65,7 +65,7 @@ public class PaymentAppointment {
 			
 			con.close();
 			
-			output = "Updated successfully";
+			output = "Payment updated successfully";
 			
 		} catch (Exception e) {
 			output = "Error while Updating the paydetails.";
@@ -95,7 +95,7 @@ public class PaymentAppointment {
 			
 			con.close();
 			
-			output = "DELETE successfully";
+			output = "Payment deleted successfully";
 			
 		} catch (Exception e) {
 			output = "Error while DELETING the paydetails.";

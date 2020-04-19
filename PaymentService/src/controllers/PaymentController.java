@@ -88,7 +88,7 @@ public class PaymentController {
 	//Update payment details.
 	//Make a refund details
 	@RolesAllowed("admin")
-	@POST
+	@PUT
 	@Path("refund")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
